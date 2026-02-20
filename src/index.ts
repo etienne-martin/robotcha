@@ -161,12 +161,14 @@ function buildStyles(): HTMLStyleElement {
       padding: 10px 12px;
       background: #f9f9f9;
       user-select: none;
-      min-width: 280px;
+      width: 304px;
+      height: 78px;
     }
 
     .rc-root.size-compact {
       padding: 6px 8px;
-      min-width: 220px;
+      width: 220px;
+      height: 60px;
     }
 
     .rc-label {
