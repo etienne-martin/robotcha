@@ -59,44 +59,6 @@ When your callback is executed, you can call the `robotcha.render` method from t
 
 ## Configuration
 
-**Bundlers (optional)**
-
-If you prefer bundling, install via npm:
-
-```bash
-npm install robotcha
-```
-
-Then use ESM (CommonJS is also available):
-
-**ESM**
-
-```ts
-import robotcha from 'robotcha';
-
-const id = robotcha.render('#robotcha', {
-  theme: 'dark',
-  size: 'compact',
-  callback: (token) => console.log('Solved:', token)
-});
-```
-
-**Auto-render (data attributes)**
-
-```html
-<div
-  class="e-robotcha"
-  data-theme="light"
-  data-size="normal"
-  data-callback="onRobotcha"
-  data-error-callback="onRobotchaError"
-></div>
-<script>
-  window.onRobotcha = (token) => console.log('Solved:', token);
-  window.onRobotchaError = () => console.error('roboTCHA failed to initialize');
-</script>
-```
-
 ### JavaScript resource (api.js) parameters
 
 | Parameter | Value | Description |
