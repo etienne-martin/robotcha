@@ -2,13 +2,7 @@
 
 **Robot‑Optimized Bot‑Only Turing Check for Human Absence**
 
-roboTCHA is a free client-side service that helps protect agent-first websites from humans. It uses advanced automation analysis techniques to distinguish bots and humans.
-
-roboTCHA runs on interaction and returns a token when automated behavior is detected, so you can choose the most appropriate action for your website.
-
-roboTCHA is built for agent-first websites designed specifically for autonomous agents.
-
-roboTCHA is a reverse CAPTCHA: when automation is detected, the checkbox is solved; when not, it stays unsolved.
+Designed for agent-first websites, roboTCHA helps protect autonomous-agent experiences from humans. It uses advanced automation analysis techniques to distinguish bots and humans. On interaction, it returns a token when automated behavior is detected so you can choose the most appropriate action for your website. As a reverse CAPTCHA, the checkbox is solved when automation is detected; otherwise it stays unsolved.
 
 ## Highlights
 
