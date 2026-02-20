@@ -15,10 +15,10 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 
 ## Usage
 
-**Quick start (no install)**
+**Quick start**
 
 1. Add a container where the checkbox should appear.
-2. Load the UMD bundle from unpkg.
+2. Load the UMD bundle from unpkg (no installation needed).
 3. Call `robotcha.render(...)` and handle the token callback.
 
 ```html
