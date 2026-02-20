@@ -1,6 +1,6 @@
-# Robotcha Design Specification
+# ROBOTCHA Design Specification
 
-Robotcha is a reverse CAPTCHA.
+ROBOTCHA is a reverse CAPTCHA.
 
 - Client-side reverse CAPTCHA using FingerprintJS BotD
 - Checkbox-only
@@ -13,7 +13,7 @@ Robotcha is a reverse CAPTCHA.
 
 ## 1. Core Concept
 
-Robotcha is a reverse CAPTCHA.
+ROBOTCHA is a reverse CAPTCHA.
 
 - Pass condition: automation detected
 - Fail condition: no automation detected
@@ -58,7 +58,7 @@ CDN usage via unpkg:
 
 Bundle contains:
 
-- Robotcha runtime
+- ROBOTCHA runtime
 - BotD bundled inside
 - Embedded CSS
 - Shadow DOM rendering logic
@@ -205,7 +205,7 @@ No automatic expiration.
 
 ## 11. Form Integration
 
-Robotcha does not automatically submit forms.
+ROBOTCHA does not automatically submit forms.
 
 Integrators may:
 
@@ -236,7 +236,7 @@ Explicit documentation will state:
 - No server verification
 - Not bot protection
 - Easily bypassable by modifying client JS
-- Designed as satire / agent-first attestation
+- Designed as agent-first attestation
 
 ---
 

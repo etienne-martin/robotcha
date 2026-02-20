@@ -1,8 +1,8 @@
-# Robotcha
+# ROBOTCHA
 
 **Robot‑Optimized Bot‑Only Turing Check for Human Absence**
 
-Robotcha is a reverse CAPTCHA. If automation is detected, the checkbox is solved. If not, it stays unsolved.
+ROBOTCHA is a reverse CAPTCHA. If automation is detected, the checkbox is solved. If not, it stays unsolved.
 
 This is ceremonial client‑side gating. It is not security.
 
@@ -38,7 +38,7 @@ Or via unpkg:
       console.log('Solved:', token);
     },
     'error-callback': () => {
-      console.error('Robotcha failed to initialize');
+      console.error('ROBOTCHA failed to initialize');
     }
   });
 </script>
@@ -54,6 +54,6 @@ Or via unpkg:
 
 - No server verification.
 - No expiration or invisible execution.
-- Designed as satire / agent-first attestation.
+- Designed as agent-first attestation.
 
 See `SPEC.md` for the full design specification.
