@@ -33,6 +33,18 @@ The script must be loaded using the HTTPS protocol and can be included from any 
 
 ## Explicitly render the roboTCHA widget
 
+Deferring the render can be achieved by specifying your onload callback function and adding parameters to the JavaScript resource.
+
+1. Specify your `onload` callback function. This function will get called when all the dependencies have loaded.
+
+```
+<script type="text/javascript">
+  var onloadCallback = function() {
+    alert("robotcha is ready!");
+  };
+</script>
+```
+
 If you want to keep the script async, use an onload callback and render explicitly:
 
 ```html
