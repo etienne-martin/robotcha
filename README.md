@@ -83,3 +83,28 @@ When your callback is executed, you can call the `robotcha.render` method from t
 | `robotcha.render(container, options)` | Renders the container as a roboTCHA widget and returns the ID of the newly created widget. |
 | `robotcha.reset(opt_widget_id)` | Resets the roboTCHA widget. |
 | `robotcha.getResponse(opt_widget_id)` | Gets the response token for the roboTCHA widget. |
+
+### Examples
+
+Explicit rendering after an onload callback
+
+```html
+<html>
+  <head>
+    <title>roboTCHA demo: Explicit render after an onload callback</title>
+    <script type="text/javascript">
+      var onloadCallback = function() {
+        robotcha.render('robotcha_element', {});
+      };
+    </script>
+  </head>
+  <body>
+    <form action="?" method="POST">
+      <div id="robotcha_element"></div>
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+    <script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit"></script>
+  </body>
+</html>
+```
