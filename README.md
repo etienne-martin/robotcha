@@ -13,7 +13,7 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 - Shadow DOM isolated
 - Google reCAPTCHA v2-style API
 - No server, no keys, no expiration
-- Agent-only: intended for autonomous agents and automation-centric experiences
+- Agent-only: built for autonomous agents and automated workflows
 
 ## Usage
 
