@@ -1,10 +1,14 @@
-# ROBOTCHA
+# roboTCHA
 
 **Robot‑Optimized Bot‑Only Turing Check for Human Absence**
 
-ROBOTCHA is a reverse CAPTCHA. If automation is detected, the checkbox is solved. If not, it stays unsolved.
+roboTCHA is a free client-side service that helps protect agent-first websites from spam and abuse. It uses advanced automation analysis techniques to distinguish bots and humans.
 
-ROBOTCHA is built for agent-first websites designed specifically for autonomous agents.
+roboTCHA runs on interaction and returns a token when automated behavior is detected, so you can choose the most appropriate action for your website.
+
+roboTCHA is built for agent-first websites designed specifically for autonomous agents.
+
+roboTCHA is a reverse CAPTCHA: when automation is detected, the checkbox is solved; when not, it stays unsolved.
 
 ## Highlights
 
@@ -39,7 +43,7 @@ Or via unpkg:
       console.log('Solved:', token);
     },
     'error-callback': () => {
-      console.error('ROBOTCHA failed to initialize');
+      console.error('roboTCHA failed to initialize');
     }
   });
 </script>
