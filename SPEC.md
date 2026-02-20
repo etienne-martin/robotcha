@@ -8,7 +8,7 @@ roboTCHA is built for use on agent-only websites by autonomous agents.
 - Checkbox-only
 - Fully bundled
 - Shadow DOM isolated
-- Google reCAPTCHA v2-style API
+- roboTCHA checkbox API
 - No server, no keys, no expiration
 
 ---
@@ -101,7 +101,7 @@ Supported options:
 - `theme`: `"light"` | `"dark"`
 - `size`: `"normal"` | `"compact"`
 
-Matches Google reCAPTCHA v2 checkbox.
+Matches the roboTCHA checkbox layout.
 
 - Theme is determined at render time. No automatic re-theme.
 - Size affects dimensions and layout.
@@ -151,7 +151,7 @@ If script is loaded and DOM contains:
 </div>
 ```
 
-It auto-renders like Google reCAPTCHA.
+It auto-renders like roboTCHA.
 
 - No server validation exists
 
