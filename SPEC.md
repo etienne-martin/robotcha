@@ -145,7 +145,6 @@ If script is loaded and DOM contains:
 
 ```html
 <div class="e-robotcha"
-     data-sitekey="robot-public"
      data-theme="light"
      data-callback="onRobotcha"
      data-error-callback="onRobotchaError">
@@ -154,7 +153,6 @@ If script is loaded and DOM contains:
 
 It auto-renders like Google reCAPTCHA.
 
-- `data-sitekey` is cosmetic only
 - No server validation exists
 
 Script parameters:

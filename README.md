@@ -8,12 +8,11 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 
 ## Automatically render the roboTCHA widget
 
-The easiest method for rendering the roboTCHA widget on your page is to include the necessary JavaScript resource and an e-robotcha tag. The e-robotcha tag is a DIV element with class name e-robotcha and your site key in the data-sitekey attribute:
+The easiest method for rendering the roboTCHA widget on your page is to include the necessary JavaScript resource and an e-robotcha tag. The e-robotcha tag is a DIV element with class name e-robotcha:
 
 ```html
 <div
   class="e-robotcha"
-  data-sitekey="robot-public"
   data-theme="light"
   data-size="normal"
   data-callback="onRobotcha"
@@ -91,7 +90,6 @@ const id = robotcha.render('#robotcha', {
 ```html
 <div
   class="e-robotcha"
-  data-sitekey="robot-public"
   data-theme="light"
   data-size="normal"
   data-callback="onRobotcha"
@@ -116,7 +114,6 @@ const id = robotcha.render('#robotcha', {
 
 | e-robotcha tag attribute | robotcha.render parameter | Value | Default | Description |
 | --- | --- | --- | --- | --- |
-| `data-sitekey` | `sitekey` | any string | _none_ | Cosmetic only (no server verification). |
 | `data-theme` | `theme` | `dark` \| `light` | `light` | Optional. The color theme of the widget. |
 | `data-size` | `size` | `compact` \| `normal` | `normal` | Optional. The size of the widget. |
 | `data-tabindex` | `tabindex` | _not supported_ | _none_ | Optional. Tabindex override is not supported. |
