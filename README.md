@@ -31,7 +31,7 @@ Or via unpkg:
 npm run demo
 ```
 
-Then open `http://localhost:4173/demo/`.
+Then open `http://localhost:4173/`.
 
 ## Usage
 

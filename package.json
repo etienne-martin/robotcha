@@ -20,15 +20,14 @@
     "dist",
     "README.md",
     "SPEC.md",
-    "demo",
-    "scripts/serve.js"
+    "demo"
   ],
   "scripts": {
     "build": "npm run build:js && npm run build:types",
     "build:js": "rollup -c",
     "build:types": "tsc -p tsconfig.types.json",
     "test": "node -e \"console.log('No tests yet')\"",
-    "demo": "npm run build && node scripts/serve.js"
+    "demo": "npm run build && serve -l 4173 demo"
   },
   "repository": {
     "type": "git",
@@ -46,7 +45,8 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.12.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "serve": "^14.2.1"
   },
   "dependencies": {
     "@fingerprintjs/botd": "^2.0.0"
