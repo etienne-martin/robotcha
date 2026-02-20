@@ -689,6 +689,12 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     event.stopPropagation();
     void handleClick(instance);
   });
+  elements.input.addEventListener('blur', () => {
+    if (instance.state === 'unsolved') {
+      instance.token = '';
+      setState(instance, 'unchecked');
+    }
+  });
   elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
