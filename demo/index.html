@@ -154,7 +154,7 @@
 
       <div class="card">
         <h2>Tabindex demo</h2>
-        <p class="hint">Tab order: 1 → roboTCHA → 3</p>
+        <p class="hint">Tabbing skips roboTCHA because tabindex is -1.</p>
         <div class="tab-demo">
           <label>
             Before
@@ -163,7 +163,7 @@
           <div
             class="e-robotcha"
             data-demo="auto-tab"
-            data-tabindex="2"
+            data-tabindex="-1"
             data-callback="onRobotchaTab"
             data-error-callback="onRobotchaError"
           ></div>
