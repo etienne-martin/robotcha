@@ -339,6 +339,10 @@ function buildStyles(): HTMLStyleElement {
       opacity: 0;
     }
 
+    .rc-root.state-checking .rc-input {
+      opacity: 0;
+    }
+
     .rc-root.theme-dark {
       background: #2a2a2a;
       border-color: #444;
