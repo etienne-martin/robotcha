@@ -36,6 +36,7 @@ type WidgetInstance = {
   elements: WidgetElements;
   state: WidgetState;
   token: string;
+  focused: boolean;
 };
 
 let nextId = 0;
@@ -208,9 +209,12 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
       instance.token = token;
       setState(instance, 'solved');
       instance.options.callback?.(token);
-    } else {
+  } else {
       instance.token = '';
       setState(instance, 'unsolved');
+      if (!instance.focused) {
+        setState(instance, 'unchecked');
+      }
     }
   } catch (error) {
     await delay;
@@ -656,7 +660,8 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     options,
     elements,
     state: 'unchecked',
-    token: ''
+    token: '',
+    focused: false
   };
 
   const onActivate = (event: Event) => {
@@ -670,44 +675,22 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     event.stopPropagation();
     void handleClick(instance);
   });
+  elements.input.addEventListener('focus', () => {
+    instance.focused = true;
+  });
+  elements.input.addEventListener('blur', () => {
+    instance.focused = false;
+    if (instance.state === 'unsolved') {
+      instance.token = '';
+      setState(instance, 'unchecked');
+    }
+  });
   elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       void handleClick(instance);
     }
   });
-
-  const hasFocusWithin = () => {
-    if ('activeElement' in instance.shadow) {
-      return instance.shadow.activeElement !== null;
-    }
-    if (typeof instance.host.matches === 'function') {
-      return instance.host.matches(':focus-within');
-    }
-    return false;
-  };
-
-  const schedule = typeof queueMicrotask === 'function'
-    ? queueMicrotask
-    : (fn: () => void) => setTimeout(fn, 0);
-
-  const onFocusOut = () => {
-    if (instance.state !== 'unsolved') {
-      return;
-    }
-    schedule(() => {
-      if (!instance.host.isConnected) {
-        return;
-      }
-      if (!hasFocusWithin()) {
-        instance.token = '';
-        setState(instance, 'unchecked');
-      }
-    });
-  };
-
-  elements.root.addEventListener('focusout', onFocusOut);
-  instance.shadow.addEventListener('focusout', onFocusOut as EventListener);
 
   return instance;
 }
