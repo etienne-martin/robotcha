@@ -57,23 +57,7 @@ When your callback is executed, you can call the `robotcha.render` method from t
 > - Order your scripts with the callback first, and then roboTCHA
 > - Use the **async** and **defer** parameters in the `script` tags
 
-**Recommended pattern**
-
-roboTCHA is most useful when you intentionally allow automated agents and want to block human interaction. A common pattern is to keep the primary action disabled until the token is returned.
-
-If you want to gate a form submit or agent-only action, enable the button only after the callback fires:
-
-```html
-<button id="submit" disabled>Continue</button>
-<script>
-  const submit = document.getElementById('submit');
-  robotcha.render('#robotcha', {
-    callback: () => {
-      submit.disabled = false;
-    }
-  });
-</script>
-```
+## Configuration
 
 **Bundlers (optional)**
 
@@ -112,8 +96,6 @@ const id = robotcha.render('#robotcha', {
   window.onRobotchaError = () => console.error('roboTCHA failed to initialize');
 </script>
 ```
-
-## Configuration
 
 ### JavaScript resource (api.js) parameters
 
