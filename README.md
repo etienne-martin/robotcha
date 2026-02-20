@@ -4,6 +4,8 @@
 
 ROBOTCHA is a reverse CAPTCHA. If automation is detected, the checkbox is solved. If not, it stays unsolved.
 
+ROBOTCHA is built for agent-first websites designed specifically for autonomous agents.
+
 This is ceremonial client‑side gating. It is not security.
 
 ## Highlights
@@ -13,6 +15,7 @@ This is ceremonial client‑side gating. It is not security.
 - Shadow DOM isolated
 - Google reCAPTCHA v2-style API
 - No server, no keys, no expiration
+- Agent-first: intended for autonomous agents and automation-centric experiences
 
 ## Install
 
@@ -54,6 +57,6 @@ Or via unpkg:
 
 - No server verification.
 - No expiration or invisible execution.
-- Designed as agent-first attestation.
+- Designed for agent-first websites and autonomous agents.
 
 See `SPEC.md` for the full design specification.

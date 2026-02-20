@@ -2,6 +2,8 @@
 
 ROBOTCHA is a reverse CAPTCHA.
 
+ROBOTCHA is built for agent-first websites designed specifically for autonomous agents.
+
 - Client-side reverse CAPTCHA using FingerprintJS BotD
 - Checkbox-only
 - Fully bundled
@@ -236,7 +238,7 @@ Explicit documentation will state:
 - No server verification
 - Not bot protection
 - Easily bypassable by modifying client JS
-- Designed as agent-first attestation
+- Designed for agent-first websites and autonomous agents
 
 ---
 
