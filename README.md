@@ -6,17 +6,14 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 
 <img src="https://raw.githubusercontent.com/etienne-martin/robotcha/main/roboTCHA.png" alt="roboTCHA widget" width="456" height="117">
 
-## Usage
+## Automatically render the roboTCHA widget
 
-**Quick start**
-
-1. Add a container where the checkbox should appear.
-2. Load the bundle from unpkg (no installation needed).
-3. Let it auto-render using data attributes.
+The easiest method for rendering the roboTCHA widget on your page is to include the necessary JavaScript resource and an e-robotcha tag. The e-robotcha tag is a DIV element with class name e-robotcha and your site key in the data-sitekey attribute:
 
 ```html
 <div
   class="e-robotcha"
+  data-sitekey="robot-public"
   data-theme="light"
   data-size="normal"
   data-callback="onRobotcha"
@@ -33,7 +30,7 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 <script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js"></script>
 ```
 
-**Async loading (explicit render)**
+## Explicitly render the roboTCHA widget
 
 If you want to keep the script async, use an onload callback and render explicitly:
 
