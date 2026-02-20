@@ -11,7 +11,7 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 **Quick start**
 
 1. Add a container where the checkbox should appear.
-2. Load the bundle from unpkg with `async defer` (no installation needed).
+2. Load the bundle from unpkg (no installation needed).
 3. Let it auto-render using data attributes.
 
 ```html
