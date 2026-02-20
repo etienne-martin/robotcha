@@ -125,12 +125,12 @@ Explicit rendering for multiple widgets
         // Renders the HTML element with id 'example1' as a roboTCHA widget.
         // The id of the roboTCHA widget is assigned to 'widgetId1'.
         widgetId1 = robotcha.render('example1', {
-          'theme': 'light'
+          theme: 'light'
         });
         widgetId2 = robotcha.render(document.getElementById('example2'), {});
         robotcha.render('example3', {
-          'callback': verifyCallback,
-          'theme': 'dark'
+          callback: verifyCallback,
+          theme: 'dark'
         });
       };
     </script>
