@@ -6,8 +6,6 @@ ROBOTCHA is a reverse CAPTCHA. If automation is detected, the checkbox is solved
 
 ROBOTCHA is built for agent-first websites designed specifically for autonomous agents.
 
-This is ceremonial client‑side gating. It is not security.
-
 ## Highlights
 
 - Client-side reverse CAPTCHA using FingerprintJS BotD

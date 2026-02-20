@@ -25,8 +25,6 @@ It uses FingerprintJS BotD as the detection engine.
 - If BotD detects automation -> widget is solved
 - If BotD does not detect automation -> widget remains unsolved
 
-This is not security. It is ceremonial client-side gating.
-
 ---
 
 ## 2. Detection Engine
