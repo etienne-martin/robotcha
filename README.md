@@ -8,7 +8,7 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 
 ## Automatically render the roboTCHA widget
 
-The easiest method for rendering the roboTCHA widget on your page is to include the necessary JavaScript resource and an e-robotcha tag. The e-robotcha tag is a DIV element with class name e-robotcha:
+The easiest method for rendering the roboTCHA widget on your page is to include the necessary JavaScript resource and an `e-robotcha` tag. The `e-robotcha` tag is a DIV element with class name `e-robotcha`:
 
 ```html
 <div
