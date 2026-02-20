@@ -22,7 +22,8 @@ type Botd = Awaited<ReturnType<typeof load>>;
 
 type WidgetElements = {
   root: HTMLDivElement;
-  button: HTMLButtonElement;
+  input: HTMLInputElement;
+  label: HTMLLabelElement;
   status: HTMLDivElement;
 };
 
@@ -96,15 +97,15 @@ function generateToken(): string {
 
 function setState(instance: WidgetInstance, state: WidgetState): void {
   instance.state = state;
-  const { root, button, status } = instance.elements;
+  const { root, input, status } = instance.elements;
 
   root.classList.remove('state-unchecked', 'state-checking', 'state-solved', 'state-unsolved');
   root.classList.add(`state-${state}`);
 
   status.textContent = STATUS_TEXT[state];
-  button.setAttribute('aria-checked', state === 'solved' ? 'true' : 'false');
-  button.setAttribute('aria-busy', state === 'checking' ? 'true' : 'false');
-  button.disabled = state === 'checking' || state === 'solved';
+  input.checked = state === 'solved';
+  input.disabled = state === 'checking' || state === 'solved';
+  input.setAttribute('aria-busy', state === 'checking' ? 'true' : 'false');
 }
 
 async function handleClick(instance: WidgetInstance): Promise<void> {
@@ -151,9 +152,7 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: inline-block;
       border: 1px solid #d3d3d3;
       border-radius: 4px;
       padding: 10px 12px;
@@ -163,12 +162,33 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.size-compact {
-      gap: 8px;
       padding: 6px 8px;
       min-width: 180px;
     }
 
-    .rc-checkbox {
+    .rc-label {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .rc-root.size-compact .rc-label {
+      gap: 8px;
+    }
+
+    .rc-input {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      border: 0;
+      padding: 0;
+    }
+
+    .rc-box {
       width: 28px;
       height: 28px;
       border: 2px solid #c1c1c1;
@@ -182,12 +202,12 @@ function buildStyles(): HTMLStyleElement {
       padding: 0;
     }
 
-    .rc-root.size-compact .rc-checkbox {
+    .rc-root.size-compact .rc-box {
       width: 22px;
       height: 22px;
     }
 
-    .rc-checkbox:focus-visible {
+    .rc-input:focus-visible + .rc-box {
       outline: 2px solid #4d90fe;
       outline-offset: 2px;
     }
@@ -198,12 +218,12 @@ function buildStyles(): HTMLStyleElement {
       gap: 2px;
     }
 
-    .rc-label {
+    .rc-label-text {
       font-size: 14px;
       letter-spacing: 0.4px;
     }
 
-    .rc-root.size-compact .rc-label {
+    .rc-root.size-compact .rc-label-text {
       font-size: 12px;
     }
 
@@ -239,17 +259,17 @@ function buildStyles(): HTMLStyleElement {
       opacity: 0;
     }
 
-    .rc-root.state-solved .rc-checkbox {
+    .rc-input:checked + .rc-box {
       background: #2e7d32;
       border-color: #2e7d32;
     }
 
-    .rc-root.state-unsolved .rc-checkbox {
+    .rc-root.state-unsolved .rc-box {
       background: #ffebee;
       border-color: #c62828;
     }
 
-    .rc-root.state-solved .rc-check {
+    .rc-input:checked + .rc-box .rc-check {
       opacity: 1;
     }
 
@@ -278,17 +298,17 @@ function buildStyles(): HTMLStyleElement {
       color: #eee;
     }
 
-    .rc-root.theme-dark .rc-checkbox {
+    .rc-root.theme-dark .rc-box {
       background: #111;
       border-color: #666;
     }
 
-    .rc-root.theme-dark.state-solved .rc-checkbox {
+    .rc-root.theme-dark .rc-input:checked + .rc-box {
       background: #2e7d32;
       border-color: #2e7d32;
     }
 
-    .rc-root.theme-dark.state-unsolved .rc-checkbox {
+    .rc-root.theme-dark.state-unsolved .rc-box {
       background: #3a1d1d;
       border-color: #e57373;
     }
@@ -310,12 +330,13 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   const root = document.createElement('div');
   root.className = 'rc-root';
 
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'rc-checkbox';
-  button.setAttribute('role', 'checkbox');
-  button.setAttribute('aria-checked', 'false');
-  button.setAttribute('aria-label', LABEL_TEXT);
+  const label = document.createElement('label');
+  label.className = 'rc-label';
+
+  const input = document.createElement('input');
+  input.type = 'checkbox';
+  input.className = 'rc-input';
+  input.setAttribute('aria-label', LABEL_TEXT);
 
   const check = document.createElement('span');
   check.className = 'rc-check';
@@ -323,26 +344,29 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   const spinner = document.createElement('span');
   spinner.className = 'rc-spinner';
 
-  button.append(check, spinner);
+  const box = document.createElement('span');
+  box.className = 'rc-box';
+  box.append(check, spinner);
 
   const text = document.createElement('div');
   text.className = 'rc-text';
 
-  const label = document.createElement('div');
-  label.className = 'rc-label';
-  label.textContent = LABEL_TEXT;
+  const labelText = document.createElement('div');
+  labelText.className = 'rc-label-text';
+  labelText.textContent = LABEL_TEXT;
 
   const status = document.createElement('div');
   status.className = 'rc-status';
 
-  text.append(label, status);
-  root.append(button, text);
+  text.append(labelText, status);
+  label.append(input, box, text);
+  root.append(label);
 
   const theme = options.theme === 'dark' ? 'dark' : 'light';
   const size = options.size === 'compact' ? 'compact' : 'normal';
   root.classList.add(`theme-${theme}`, `size-${size}`, 'state-unchecked');
 
-  return { root, button, status };
+  return { root, input, label, status };
 }
 
 function createInstance(container: Element, options: RobotchaRenderOptions): WidgetInstance | null {
@@ -378,12 +402,16 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     token: ''
   };
 
-  const onClick = () => void handleClick(instance);
-  elements.button.addEventListener('click', onClick);
-  elements.button.addEventListener('keydown', (event) => {
+  const onActivate = (event: Event) => {
+    event.preventDefault();
+    void handleClick(instance);
+  };
+
+  elements.label.addEventListener('click', onActivate);
+  elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
-      onClick();
+      void handleClick(instance);
     }
   });
 
