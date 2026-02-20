@@ -176,10 +176,12 @@ function setState(instance: WidgetInstance, state: WidgetState): void {
   status.textContent = STATUS_TEXT[state];
   input.checked = state === 'solved';
   input.setAttribute('aria-busy', state === 'checking' ? 'true' : 'false');
-  if (state === 'solved') {
+  if (state === 'solved' || state === 'unsolved') {
     input.setAttribute('aria-disabled', 'true');
+    input.disabled = true;
   } else {
     input.removeAttribute('aria-disabled');
+    input.disabled = false;
   }
 }
 
@@ -191,7 +193,7 @@ function focusInput(instance: WidgetInstance): void {
 }
 
 async function handleClick(instance: WidgetInstance): Promise<void> {
-  if (instance.state === 'checking' || instance.state === 'solved') {
+  if (instance.state === 'checking' || instance.state === 'solved' || instance.state === 'unsolved') {
     return;
   }
 
@@ -425,6 +427,34 @@ function buildStyles(): HTMLStyleElement {
       grid-area: 1 / 1;
     }
 
+    .rc-cross {
+      position: relative;
+      width: var(--rc-check-width);
+      height: var(--rc-check-width);
+      opacity: 0;
+      grid-area: 1 / 1;
+    }
+
+    .rc-cross::before,
+    .rc-cross::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: var(--rc-check-stroke);
+      background: #c62828;
+      transform-origin: center;
+    }
+
+    .rc-cross::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .rc-cross::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
     .rc-input:checked {
       background: #00a357;
       border-color: #00a357;
@@ -479,6 +509,10 @@ function buildStyles(): HTMLStyleElement {
 
     .rc-root.state-checking .rc-check {
       opacity: 0;
+    }
+
+    .rc-root.state-unsolved .rc-cross {
+      opacity: 1;
     }
 
     .rc-root.state-checking .rc-input {
@@ -565,12 +599,15 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   const check = document.createElement('span');
   check.className = 'rc-check';
 
+  const cross = document.createElement('span');
+  cross.className = 'rc-cross';
+
   const spinner = document.createElement('span');
   spinner.className = 'rc-spinner';
 
   const box = document.createElement('span');
   box.className = 'rc-box';
-  box.append(check, spinner);
+  box.append(check, cross, spinner);
 
   const text = document.createElement('div');
   text.className = 'rc-text';
