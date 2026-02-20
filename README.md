@@ -38,7 +38,7 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 </script>
 ```
 
-**Recommended pattern (agent-first)**
+**Recommended pattern**
 
 roboTCHA is most useful when you intentionally allow automated agents and want to block human interaction. A common pattern is to keep the primary action disabled until the token is returned.
 
