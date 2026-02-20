@@ -20,4 +20,21 @@ if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
   exit 0
 fi
 
+TMP_PACKAGE_JSON=$(mktemp)
+cp package.json "${TMP_PACKAGE_JSON}"
+
+cleanup() {
+  mv "${TMP_PACKAGE_JSON}" package.json
+}
+
+trap cleanup EXIT
+
+node - <<'NODE'
+const fs = require('fs');
+const path = 'package.json';
+const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
+delete pkg.dependencies;
+fs.writeFileSync(path, `${JSON.stringify(pkg, null, 2)}\n`);
+NODE
+
 npm publish --access public
