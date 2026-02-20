@@ -74,7 +74,6 @@ When your callback is executed, you can call the `robotcha.render` method from t
 | `data-size` | `size` | `compact` \| `normal` | `normal` | Optional. The size of the widget. |
 | `data-tabindex` | `tabindex` | _not supported_ | _none_ | Optional. Tabindex override is not supported. |
 | `data-callback` | `callback` | function name | _none_ | Optional. The name of your callback function, executed when automation is detected. The token is passed to your callback. |
-| `data-expired-callback` | `expired-callback` | _not supported_ | _none_ | Optional. Expiration callbacks are not supported. |
 | `data-error-callback` | `error-callback` | function name | _none_ | Optional. The name of your callback function, executed when roboTCHA encounters a runtime error. |
 
 ## JavaScript API
