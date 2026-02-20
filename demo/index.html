@@ -137,6 +137,15 @@
       </div>
 
       <div class="card">
+        <h2>Manual render (dark, normal)</h2>
+        <div id="manual-dark-normal"></div>
+        <div class="actions">
+          <button class="action" data-reset="manual-dark-normal">Reset</button>
+          <button class="action" data-response="manual-dark-normal">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
         <h2>Auto render (data attributes)</h2>
         <div
           class="e-robotcha"
@@ -223,9 +232,20 @@
         'error-callback': () => logLine('manual dark error-callback fired')
       });
 
+      const manualDarkNormalId = robotcha.render(
+        document.getElementById('manual-dark-normal'),
+        {
+          theme: 'dark',
+          size: 'normal',
+          callback: (token) => logLine(`manual dark normal callback: ${token}`),
+          'error-callback': () => logLine('manual dark normal error-callback fired')
+        }
+      );
+
       const manualMap = new Map([
         ['manual-light', manualLightId],
-        ['manual-dark', manualDarkId]
+        ['manual-dark', manualDarkId],
+        ['manual-dark-normal', manualDarkNormalId]
       ]);
 
       document.querySelectorAll('[data-reset]').forEach((button) => {
