@@ -14,6 +14,16 @@ const baseOutput = {
   sourcemap: true
 };
 
+const watch = {
+  clearScreen: false,
+  include: 'src/**',
+  exclude: 'node_modules/**',
+  chokidar: {
+    usePolling: true,
+    interval: 200
+  }
+};
+
 module.exports = [
   {
     input: 'src/index.ts',
@@ -22,11 +32,13 @@ module.exports = [
       { file: 'dist/robotcha.esm.js', format: 'es', sourcemap: true },
       { file: 'dist/robotcha.cjs.js', format: 'cjs', exports: 'named', sourcemap: true }
     ],
-    plugins: basePlugins
+    plugins: basePlugins,
+    watch
   },
   {
     input: 'src/index.ts',
     output: { file: 'dist/robotcha.min.js', format: 'umd', exports: 'named', ...baseOutput },
-    plugins: [...basePlugins, terser()]
+    plugins: [...basePlugins, terser()],
+    watch
   }
 ];
