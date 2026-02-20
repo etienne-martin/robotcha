@@ -29,6 +29,8 @@ The easiest method for rendering the roboTCHA widget on your page is to include 
 <script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js"></script>
 ```
 
+The script must be loaded using the HTTPS protocol and can be included from any point on the page without restriction.
+
 ## Explicitly render the roboTCHA widget
 
 If you want to keep the script async, use an onload callback and render explicitly:
