@@ -45,6 +45,14 @@ Deferring the render can be achieved by specifying your onload callback function
 </script>
 ```
 
+2. Insert the JavaScript resource, setting the `onload` parameter to the name of your onload callback function and the `render` parameter to `explicit`.
+
+```html
+<script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit"></script>
+```
+
+When your callback is executed, you can call the `robotcha.render` method from the [JavaScript API](#javascript-api).
+
 If you want to keep the script async, use an onload callback and render explicitly:
 
 ```html
