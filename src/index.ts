@@ -225,6 +225,7 @@ function buildStyles(): HTMLStyleElement {
     .rc-text {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 2px;
     }
 
