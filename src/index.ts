@@ -239,6 +239,7 @@ function buildStyles(): HTMLStyleElement {
       --rc-control-size: 28px;
       --rc-gap: 10px;
       --rc-check-stroke: 4px;
+      --rc-check-length: 24;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -489,8 +490,6 @@ function buildStyles(): HTMLStyleElement {
 
     .rc-root.state-solved .rc-check-path {
       stroke: #00a357;
-      stroke-dasharray: var(--rc-check-length);
-      stroke-dashoffset: var(--rc-check-length);
       animation: rc-draw-check 0.28s ease-out forwards;
     }
 
@@ -585,10 +584,6 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   const checkPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   checkPath.setAttribute('class', 'rc-check-path');
   checkPath.setAttribute('d', 'M5 13l4 4L19 7');
-  const length = checkPath.getTotalLength();
-  checkPath.style.setProperty('--rc-check-length', String(length));
-  checkPath.style.strokeDasharray = String(length);
-  checkPath.style.strokeDashoffset = String(length);
   checkSvg.append(checkPath);
   check.append(checkSvg);
 
