@@ -38,6 +38,22 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 </script>
 ```
 
+**Async loading (explicit render)**
+
+If you want to keep the script async, use an onload callback and render explicitly:
+
+```html
+<div id="robotcha"></div>
+<script>
+  var onloadCallback = function () {
+    robotcha.render('#robotcha', {
+      callback: (token) => console.log('Solved:', token)
+    });
+  };
+</script>
+<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit" async defer></script>
+```
+
 **Recommended pattern**
 
 roboTCHA is most useful when you intentionally allow automated agents and want to block human interaction. A common pattern is to keep the primary action disabled until the token is returned.

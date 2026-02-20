@@ -60,6 +60,39 @@ function resolveContainer(container: Element | string): Element | null {
   return container;
 }
 
+type ScriptConfig = {
+  onload: string | null;
+  renderExplicit: boolean;
+};
+
+function getScriptConfig(): ScriptConfig {
+  if (typeof document === 'undefined' || typeof window === 'undefined') {
+    return { onload: null, renderExplicit: false };
+  }
+
+  let script = document.currentScript as HTMLScriptElement | null;
+  if (!script || !script.src) {
+    const scripts = Array.from(document.getElementsByTagName('script'));
+    script = scripts.find((item) => item.src && item.src.includes('robotcha')) ?? null;
+  }
+
+  if (!script || !script.src) {
+    return { onload: null, renderExplicit: false };
+  }
+
+  try {
+    const url = new URL(script.src, window.location.href);
+    const onload = url.searchParams.get('onload');
+    const render = url.searchParams.get('render');
+    return {
+      onload,
+      renderExplicit: render === 'explicit'
+    };
+  } catch {
+    return { onload: null, renderExplicit: false };
+  }
+}
+
 function ensureBotd(): Promise<Botd> {
   if (!botdPromise) {
     botdPromise = load({ monitoring: false });
@@ -742,10 +775,20 @@ if (typeof window !== 'undefined') {
   (window as any).robotcha = robotcha;
 
   if (typeof document !== 'undefined') {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', autoRender, { once: true });
-    } else {
-      autoRender();
+    const scriptConfig = getScriptConfig();
+    if (!scriptConfig.renderExplicit) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', autoRender, { once: true });
+      } else {
+        autoRender();
+      }
+    }
+
+    if (scriptConfig.onload) {
+      const callback = (window as any)[scriptConfig.onload];
+      if (typeof callback === 'function') {
+        callback();
+      }
     }
   }
 }

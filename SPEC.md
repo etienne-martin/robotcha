@@ -157,6 +157,11 @@ It auto-renders like Google reCAPTCHA.
 - `data-sitekey` is cosmetic only
 - No server validation exists
 
+Script parameters:
+
+- `?onload=callbackName` invokes `window[callbackName]()` once the library is ready.
+- `?render=explicit` disables auto-render so the onload callback can call `robotcha.render(...)` manually.
+
 ---
 
 ## 9. Callback Behavior (Exactly Like Google v2 Checkbox)
