@@ -195,6 +195,7 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
     return;
   }
 
+  focusInput(instance);
   setState(instance, 'checking');
   const delay = wait(randomDelay());
 
@@ -682,7 +683,16 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
       void handleClick(instance);
     }
   });
-  elements.input.addEventListener('blur', resetIfUnsolved);
+  elements.root.addEventListener('focusout', (event) => {
+    if (instance.state !== 'unsolved') {
+      return;
+    }
+    const nextTarget = event.relatedTarget as Node | null;
+    if (nextTarget && instance.host.contains(nextTarget)) {
+      return;
+    }
+    resetIfUnsolved();
+  });
 
   return instance;
 }
