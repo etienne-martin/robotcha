@@ -220,14 +220,19 @@ function buildStyles(): HTMLStyleElement {
     .rc-text {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 2px;
+      min-height: var(--rc-control-size);
     }
 
     .rc-label-text {
+      color: #111;
+      cursor: default;
+      font-family: Arial, sans-serif;
       font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      line-height: 16px;
     }
 
     .rc-root.size-compact .rc-label-text {
@@ -347,6 +352,10 @@ function buildStyles(): HTMLStyleElement {
     .rc-root.theme-dark {
       background: #2a2a2a;
       border-color: #444;
+      color: #eee;
+    }
+
+    .rc-root.theme-dark .rc-label-text {
       color: #eee;
     }
 
