@@ -551,6 +551,10 @@ function buildStyles(): HTMLStyleElement {
       border-color: #e57373;
     }
 
+    .rc-root.theme-dark.state-unsolved .rc-status {
+      color: #f28b82;
+    }
+
     .rc-root.theme-dark.state-solved .rc-label:hover .rc-input,
     .rc-root.theme-dark.state-solved .rc-label:focus-within .rc-input {
       background: transparent;
