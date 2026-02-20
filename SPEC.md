@@ -48,12 +48,12 @@ No additional heuristic scoring layer was chosen. BotD is the authority.
 
 Published to npm as:
 
-- `@your-scope/robotcha`
+- `robotcha`
 
 CDN usage via unpkg:
 
 ```html
-<script src="https://unpkg.com/@your-scope/robotcha@latest/dist/robotcha.umd.js" async defer></script>
+<script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
 ```
 
 Bundle contains:

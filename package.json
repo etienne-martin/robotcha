@@ -1,0 +1,48 @@
+{
+  "name": "robotcha",
+  "version": "0.0.1",
+  "description": "Robot-Optimized Bot-Only Turing Check for Human Absence.",
+  "private": false,
+  "main": "dist/robotcha.cjs.js",
+  "module": "dist/robotcha.esm.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/robotcha.umd.js",
+  "browser": "dist/robotcha.umd.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/robotcha.esm.js",
+      "require": "./dist/robotcha.cjs.js",
+      "default": "./dist/robotcha.umd.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "SPEC.md"
+  ],
+  "scripts": {
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "rollup -c",
+    "build:types": "tsc -p tsconfig.types.json",
+    "test": "node -e \"console.log('No tests yet')\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etienne-martin/robotcha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/etienne-martin/robotcha/issues"
+  },
+  "homepage": "https://github.com/etienne-martin/robotcha#readme",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "tslib": "^2.6.2",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.12.0",
+    "typescript": "^5.3.3"
+  }
+}
