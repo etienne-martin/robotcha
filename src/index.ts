@@ -36,7 +36,6 @@ type WidgetInstance = {
   elements: WidgetElements;
   state: WidgetState;
   token: string;
-  focused: boolean;
 };
 
 let nextId = 0;
@@ -209,12 +208,9 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
       instance.token = token;
       setState(instance, 'solved');
       instance.options.callback?.(token);
-  } else {
+    } else {
       instance.token = '';
       setState(instance, 'unsolved');
-      if (!instance.focused) {
-        setState(instance, 'unchecked');
-      }
     }
   } catch (error) {
     await delay;
@@ -660,13 +656,19 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     options,
     elements,
     state: 'unchecked',
-    token: '',
-    focused: false
+    token: ''
   };
 
   const onActivate = (event: Event) => {
     event.preventDefault();
     void handleClick(instance);
+  };
+
+  const resetIfUnsolved = () => {
+    if (instance.state === 'unsolved') {
+      instance.token = '';
+      setState(instance, 'unchecked');
+    }
   };
 
   elements.label.addEventListener('click', onActivate);
@@ -675,21 +677,21 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     event.stopPropagation();
     void handleClick(instance);
   });
-  elements.input.addEventListener('focus', () => {
-    instance.focused = true;
-  });
-  elements.input.addEventListener('blur', () => {
-    instance.focused = false;
-    if (instance.state === 'unsolved') {
-      instance.token = '';
-      setState(instance, 'unchecked');
-    }
-  });
   elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       void handleClick(instance);
     }
+  });
+  elements.root.addEventListener('focusout', (event) => {
+    if (instance.state !== 'unsolved') {
+      return;
+    }
+    const nextTarget = event.relatedTarget as Node | null;
+    if (nextTarget && instance.host.contains(nextTarget)) {
+      return;
+    }
+    resetIfUnsolved();
   });
 
   return instance;
