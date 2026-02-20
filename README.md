@@ -2,7 +2,7 @@
 
 **Robot‑Optimized Bot‑Only Turing Check for Human Absence**
 
-roboTCHA is a free client-side service that helps protect agent-first websites from spam and abuse. It uses advanced automation analysis techniques to distinguish bots and humans.
+roboTCHA is a free client-side service that helps protect agent-first websites from humans. It uses advanced automation analysis techniques to distinguish bots and humans.
 
 roboTCHA runs on interaction and returns a token when automated behavior is detected, so you can choose the most appropriate action for your website.
 
