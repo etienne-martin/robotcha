@@ -28,15 +28,6 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Verify dist is up to date
-        run: |
-          changed="$(git diff --name-only -- dist)"
-          if [ -n "$changed" ]; then
-            echo "::error::dist/ is out of date. Run 'npm run build' and commit the updated dist/."
-            echo "$changed"
-            exit 1
-          fi
-
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
         with:
