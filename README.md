@@ -18,24 +18,26 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 **Quick start**
 
 1. Add a container where the checkbox should appear.
-2. Load the bundle from unpkg (no installation needed).
-3. Call `robotcha.render(...)` and handle the token callback.
+2. Load the bundle from unpkg with `async defer` (no installation needed).
+3. Let it auto-render using data attributes.
 
 ```html
-<div id="robotcha"></div>
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js"></script>
+<div
+  class="g-robotcha"
+  data-theme="light"
+  data-size="normal"
+  data-callback="onRobotcha"
+  data-error-callback="onRobotchaError"
+></div>
 <script>
-  const id = robotcha.render(document.getElementById('robotcha'), {
-    theme: 'light',
-    size: 'normal',
-    callback: (token) => {
-      console.log('Solved:', token);
-    },
-    'error-callback': () => {
-      console.error('roboTCHA failed to initialize');
-    }
-  });
+  window.onRobotcha = (token) => {
+    console.log('Solved:', token);
+  };
+  window.onRobotchaError = () => {
+    console.error('roboTCHA failed to initialize');
+  };
 </script>
+<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js" async defer></script>
 ```
 
 **Async loading (explicit render)**
