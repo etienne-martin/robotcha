@@ -547,13 +547,13 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.theme-dark.state-unsolved .rc-input {
-      background: #ffebee;
+      background: #3a1f20;
       border-color: #f28b82;
     }
 
     .rc-root.theme-dark.state-unsolved .rc-label:hover .rc-input,
     .rc-root.theme-dark.state-unsolved .rc-label:focus-within .rc-input {
-      background: #ffebee;
+      background: #3a1f20;
       border-color: #f28b82;
     }
 
