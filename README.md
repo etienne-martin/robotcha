@@ -94,7 +94,7 @@ Explicit rendering after an onload callback
     <title>roboTCHA demo: Explicit render after an onload callback</title>
     <script type="text/javascript">
       var onloadCallback = function() {
-        robotcha.render('robotcha_element', { theme: 'light' });
+        robotcha.render('robotcha_element', { theme: 'dark' });
       };
     </script>
   </head>
