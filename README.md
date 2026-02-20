@@ -25,6 +25,14 @@ Or via unpkg:
 <script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
 ```
 
+## Local Demo
+
+```bash
+npm run demo
+```
+
+Then open `http://localhost:4173/demo/`.
+
 ## Usage
 
 ```html

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>roboTCHA Demo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px;
+        background: #f4f5f7;
+        color: #1f1f1f;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: 24px;
+      }
+      p {
+        margin: 0 0 24px;
+        color: #4b5563;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+      }
+      .card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      }
+      .log {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 12px;
+        border-radius: 6px;
+        min-height: 80px;
+        white-space: pre-wrap;
+      }
+      button.action {
+        margin-top: 12px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #cbd5f5;
+        background: #eef2ff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>roboTCHA Local Demo</h1>
+    <p>Open the console to see callbacks fire. Use the buttons to reset.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Manual Render</h2>
+        <div id="manual"></div>
+        <button class="action" id="reset-manual">Reset</button>
+      </div>
+
+      <div class="card">
+        <h2>Auto Render</h2>
+        <div
+          class="g-robotcha"
+          data-theme="dark"
+          data-size="compact"
+          data-callback="onRobotcha"
+          data-error-callback="onRobotchaError"
+        ></div>
+        <button class="action" id="reset-auto">Reset</button>
+      </div>
+
+      <div class="card">
+        <h2>Events</h2>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+
+    <script src="/dist/robotcha.umd.js"></script>
+    <script>
+      const log = document.getElementById('log');
+      const logLine = (message) => {
+        const timestamp = new Date().toLocaleTimeString();
+        log.textContent = `[${timestamp}] ${message}\n` + log.textContent;
+      };
+
+      window.onRobotcha = (token) => {
+        logLine(`auto callback: ${token}`);
+      };
+
+      window.onRobotchaError = () => {
+        logLine('auto error-callback fired');
+      };
+
+      const manualId = robotcha.render(document.getElementById('manual'), {
+        theme: 'light',
+        size: 'normal',
+        callback: (token) => logLine(`manual callback: ${token}`),
+        'error-callback': () => logLine('manual error-callback fired')
+      });
+
+      document.getElementById('reset-manual').addEventListener('click', () => {
+        robotcha.reset(manualId);
+        logLine('manual reset');
+      });
+
+      document.getElementById('reset-auto').addEventListener('click', () => {
+        const response = robotcha.getResponse();
+        robotcha.reset();
+        logLine(`auto reset (prev response: ${response || 'empty'})`);
+      });
+    </script>
+  </body>
+</html>

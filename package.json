@@ -19,13 +19,16 @@
   "files": [
     "dist",
     "README.md",
-    "SPEC.md"
+    "SPEC.md",
+    "demo",
+    "scripts/serve.js"
   ],
   "scripts": {
     "build": "npm run build:js && npm run build:types",
     "build:js": "rollup -c",
     "build:types": "tsc -p tsconfig.types.json",
-    "test": "node -e \"console.log('No tests yet')\""
+    "test": "node -e \"console.log('No tests yet')\"",
+    "demo": "npm run build && node scripts/serve.js"
   },
   "repository": {
     "type": "git",
