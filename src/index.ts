@@ -167,7 +167,6 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-label {
-      position: relative;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -178,38 +177,43 @@ function buildStyles(): HTMLStyleElement {
       gap: 8px;
     }
 
-    .rc-input {
-      position: absolute;
-      opacity: 0;
-      width: 1px;
-      height: 1px;
-      margin: -1px;
-      border: 0;
-      padding: 0;
-    }
-
-    .rc-box {
+    .rc-control {
+      position: relative;
       width: 28px;
       height: 28px;
-      border: 2px solid #c1c1c1;
-      border-radius: 3px;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-      padding: 0;
+      display: inline-block;
+      flex-shrink: 0;
     }
 
-    .rc-root.size-compact .rc-box {
+    .rc-root.size-compact .rc-control {
       width: 22px;
       height: 22px;
     }
 
-    .rc-input:focus-visible + .rc-box {
+    .rc-input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border: 2px solid #c1c1c1;
+      border-radius: 3px;
+      background: #fff;
+      cursor: pointer;
+      display: block;
+    }
+
+    .rc-input:focus-visible {
       outline: 2px solid #4d90fe;
       outline-offset: 2px;
+    }
+
+    .rc-box {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
     }
 
     .rc-text {
@@ -257,14 +261,15 @@ function buildStyles(): HTMLStyleElement {
       border-bottom: 3px solid #fff;
       transform: rotate(-45deg);
       opacity: 0;
+      grid-area: 1 / 1;
     }
 
-    .rc-input:checked + .rc-box {
+    .rc-input:checked {
       background: #2e7d32;
       border-color: #2e7d32;
     }
 
-    .rc-root.state-unsolved .rc-box {
+    .rc-root.state-unsolved .rc-input {
       background: #ffebee;
       border-color: #c62828;
     }
@@ -281,7 +286,7 @@ function buildStyles(): HTMLStyleElement {
       border-radius: 50%;
       animation: rc-spin 0.8s linear infinite;
       opacity: 0;
-      position: absolute;
+      grid-area: 1 / 1;
     }
 
     .rc-root.state-checking .rc-spinner {
@@ -298,17 +303,17 @@ function buildStyles(): HTMLStyleElement {
       color: #eee;
     }
 
-    .rc-root.theme-dark .rc-box {
+    .rc-root.theme-dark .rc-input {
       background: #111;
       border-color: #666;
     }
 
-    .rc-root.theme-dark .rc-input:checked + .rc-box {
+    .rc-root.theme-dark .rc-input:checked {
       background: #2e7d32;
       border-color: #2e7d32;
     }
 
-    .rc-root.theme-dark.state-unsolved .rc-box {
+    .rc-root.theme-dark.state-unsolved .rc-input {
       background: #3a1d1d;
       border-color: #e57373;
     }
@@ -332,6 +337,9 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
 
   const label = document.createElement('label');
   label.className = 'rc-label';
+
+  const control = document.createElement('span');
+  control.className = 'rc-control';
 
   const input = document.createElement('input');
   input.type = 'checkbox';
@@ -359,7 +367,8 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   status.className = 'rc-status';
 
   text.append(labelText, status);
-  label.append(input, box, text);
+  control.append(input, box);
+  label.append(control, text);
   root.append(label);
 
   const theme = options.theme === 'dark' ? 'dark' : 'light';
