@@ -1,0 +1,51 @@
+name: version-bump
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, edited, synchronize, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  version-bump:
+    if: ${{ !github.event.pull_request.draft && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Version bump via sudden-agent
+        uses: sudden-network/agent@v1
+        with:
+          agent_auth_file: ${{ secrets.CODEX_AUTH_JSON }}
+          resume: true
+          prompt: |
+            Goal: keep the root package.json version aligned with the impact of changes in this repo.
+
+            Bump when changes affect the published npm package, its public API, or its runtime behavior or
+            dependencies. Do not bump for tooling-only changes (tests, CI, internal refactors with no runtime impact).
+
+            SemVer rules:
+            - Breaking change -> major.
+            - New backward-compatible feature -> minor.
+            - Backward-compatible fixes or runtime-affecting changes -> patch (bugs, perf, dependency updates, docs
+              for public API).
+            - Tooling-only changes -> no bump.
+
+            Detect manual bumps (package.json version changed vs base). If present and correct, keep. If wrong, adjust.
+
+            Before applying or reapplying a bump, review the PR conversation and commit history for prior bump reverts
+            or explicit rejections. If the same bump reason was previously rejected or reverted, do not reapply it.
+            Only reapply when the PR diff changed after the rejection and you can justify a different bump reason. If
+            you reapply, say why the prior rejection no longer applies.
+
+            If a bump is required, update package.json in the PR branch, only edit the `version` field, and add an
+            inline comment with a short reason. If no bump is required and no manual bump is present, do not change
+            files and do not comment.
