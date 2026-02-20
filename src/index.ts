@@ -377,6 +377,26 @@ function buildStyles(): HTMLStyleElement {
 
     .rc-root.size-compact .rc-brand {
       padding: 6px 8px;
+      gap: 2px;
+      font-size: 9px;
+    }
+
+    .rc-root.size-compact .rc-brand-icon {
+      width: 22px;
+      height: 22px;
+    }
+
+    .rc-root.size-compact .rc-brand-icon::after {
+      inset: 6px;
+    }
+
+    .rc-root.size-compact .rc-brand-text {
+      font-size: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    .rc-root.size-compact .rc-brand-links {
+      font-size: 9px;
     }
     .rc-brand-icon {
       width: 28px;
