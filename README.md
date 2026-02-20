@@ -39,7 +39,7 @@ Then open `http://localhost:4173/demo/`.
 npm run dev
 ```
 
-This starts a watcher that rebuilds `dist/` on changes and serves the demo at `http://localhost:4173/demo/`.
+This runs the same watcher as `npm run demo`.
 
 ## Usage
 
