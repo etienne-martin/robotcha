@@ -684,6 +684,24 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
   });
   elements.input.addEventListener('blur', resetIfUnsolved);
 
+  if (typeof document !== 'undefined') {
+    const onOutsidePointer = (event: PointerEvent) => {
+      if (!instance.host.isConnected) {
+        document.removeEventListener('pointerdown', onOutsidePointer, true);
+        return;
+      }
+      if (instance.state !== 'unsolved') {
+        return;
+      }
+      const target = event.target as Node | null;
+      if (target && instance.host.contains(target)) {
+        return;
+      }
+      resetIfUnsolved();
+    };
+    document.addEventListener('pointerdown', onOutsidePointer, true);
+  }
+
   return instance;
 }
 
