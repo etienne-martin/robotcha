@@ -48,6 +48,34 @@
         padding: 20px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
       }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .tab-demo {
+        display: grid;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .tab-demo label {
+        display: grid;
+        gap: 6px;
+        font-size: 12px;
+        color: #374151;
+      }
+      .tab-demo input {
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        font-size: 12px;
+      }
+      .hint {
+        margin: 8px 0 0;
+        font-size: 12px;
+        color: #6b7280;
+      }
       .log {
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         background: #0f172a;
@@ -58,13 +86,12 @@
         white-space: pre-wrap;
       }
       button.action {
-        margin-top: 12px;
         padding: 8px 12px;
         border-radius: 6px;
         border: 1px solid #cbd5f5;
         background: #eef2ff;
         color: #1e1b4b;
-        cursor: pointer;
+        cursor: default;
       }
 
       button.action:hover {
@@ -89,21 +116,63 @@
 
     <div class="grid">
       <div class="card">
-        <h2>Manual Render</h2>
-        <div id="manual"></div>
-        <button class="action" id="reset-manual">Reset</button>
+        <h2>Manual render (light)</h2>
+        <div id="manual-light"></div>
+        <div class="actions">
+          <button class="action" data-reset="manual-light">Reset</button>
+          <button class="action" data-response="manual-light">Get response</button>
+        </div>
       </div>
 
       <div class="card">
-        <h2>Auto Render</h2>
+        <h2>Manual render (dark, compact)</h2>
+        <div id="manual-dark"></div>
+        <div class="actions">
+          <button class="action" data-reset="manual-dark">Reset</button>
+          <button class="action" data-response="manual-dark">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Auto render (data attributes)</h2>
         <div
           class="e-robotcha"
+          data-demo="auto-dark"
           data-theme="dark"
           data-size="compact"
-          data-callback="onRobotcha"
+          data-callback="onRobotchaAutoDark"
           data-error-callback="onRobotchaError"
         ></div>
-        <button class="action" id="reset-auto">Reset</button>
+        <div class="actions">
+          <button class="action" data-reset-auto="auto-dark">Reset</button>
+          <button class="action" data-response-auto="auto-dark">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Tabindex demo</h2>
+        <p class="hint">Tab order: 1 → roboTCHA → 3</p>
+        <div class="tab-demo">
+          <label>
+            Before
+            <input type="text" tabindex="1" />
+          </label>
+          <div
+            class="e-robotcha"
+            data-demo="auto-tab"
+            data-tabindex="2"
+            data-callback="onRobotchaTab"
+            data-error-callback="onRobotchaError"
+          ></div>
+          <label>
+            After
+            <input type="text" tabindex="3" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="action" data-reset-auto="auto-tab">Reset</button>
+          <button class="action" data-response-auto="auto-tab">Get response</button>
+        </div>
       </div>
 
       <div class="card">
@@ -124,31 +193,88 @@
         logLine(`auto callback: ${token}`);
       };
 
+      window.onRobotchaAutoDark = (token) => {
+        logLine(`auto dark callback: ${token}`);
+      };
+
+      window.onRobotchaTab = (token) => {
+        logLine(`tabindex callback: ${token}`);
+      };
+
       window.onRobotchaError = () => {
         logLine('auto error-callback fired');
       };
 
-      const manualId = robotcha.render(document.getElementById('manual'), {
+      const manualLightId = robotcha.render(document.getElementById('manual-light'), {
         theme: 'light',
         size: 'normal',
-        callback: (token) => logLine(`manual callback: ${token}`),
-        'error-callback': () => logLine('manual error-callback fired')
+        callback: (token) => logLine(`manual light callback: ${token}`),
+        'error-callback': () => logLine('manual light error-callback fired')
       });
 
-      document.getElementById('reset-manual').addEventListener('click', () => {
-        robotcha.reset(manualId);
-        logLine('manual reset');
+      const manualDarkId = robotcha.render(document.getElementById('manual-dark'), {
+        theme: 'dark',
+        size: 'compact',
+        tabindex: 2,
+        callback: (token) => logLine(`manual dark callback: ${token}`),
+        'error-callback': () => logLine('manual dark error-callback fired')
       });
 
-      document.getElementById('reset-auto').addEventListener('click', () => {
-        const autoNode = document.querySelector('.e-robotcha');
-        const idAttr = autoNode?.dataset?.robotchaId;
-        const autoId = idAttr ? Number(idAttr) : -1;
-        const response = autoId >= 0 ? robotcha.getResponse(autoId) : '';
-        if (autoId >= 0) {
-          robotcha.reset(autoId);
-        }
-        logLine(`auto reset (prev response: ${response || 'empty'})`);
+      const manualMap = new Map([
+        ['manual-light', manualLightId],
+        ['manual-dark', manualDarkId]
+      ]);
+
+      document.querySelectorAll('[data-reset]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-reset');
+          if (!key) return;
+          const id = manualMap.get(key);
+          if (typeof id === 'number') {
+            robotcha.reset(id);
+            logLine(`${key} reset`);
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-response]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-response');
+          if (!key) return;
+          const id = manualMap.get(key);
+          const response = typeof id === 'number' ? robotcha.getResponse(id) : '';
+          logLine(`${key} response: ${response || 'empty'}`);
+        });
+      });
+
+      const getAutoId = (key) => {
+        const node = document.querySelector(`[data-demo="${key}"]`);
+        const idAttr = node?.dataset?.robotchaId;
+        return idAttr ? Number(idAttr) : -1;
+      };
+
+      document.querySelectorAll('[data-reset-auto]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-reset-auto');
+          if (!key) return;
+          const autoId = getAutoId(key);
+          if (autoId >= 0) {
+            robotcha.reset(autoId);
+            logLine(`${key} reset`);
+          } else {
+            logLine(`${key} reset failed (no id)`);
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-response-auto]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-response-auto');
+          if (!key) return;
+          const autoId = getAutoId(key);
+          const response = autoId >= 0 ? robotcha.getResponse(autoId) : '';
+          logLine(`${key} response: ${response || 'empty'}`);
+        });
       });
     </script>
   </body>
