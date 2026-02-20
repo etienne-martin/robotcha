@@ -53,7 +53,7 @@ Deferring the render can be achieved by specifying your onload callback function
 
 When your callback is executed, you can call the `robotcha.render` method from the [JavaScript API](#javascript-api).
 
-> Your **onload** callback function must be defined before the roboTCHA API `script` loads. To ensure there are no race conditions:
+> Your **onload** callback function must be defined before the roboTCHA API loads. To ensure there are no race conditions:
 > - Order your scripts with the callback first, and then roboTCHA
 > - Use the **async** and **defer** parameters in the `script` tags
 
