@@ -113,30 +113,6 @@ const id = robotcha.render('#robotcha', {
 </script>
 ```
 
-**Reset / getResponse**
-
-```js
-const id = robotcha.render('#robotcha');
-const token = robotcha.getResponse(id);
-robotcha.reset(id);
-```
-
-## Local Demo
-
-```bash
-npm run demo
-```
-
-Then open `http://localhost:4173/demo/`.
-
-## Dev Mode
-
-```bash
-npm run dev
-```
-
-This runs the same watcher as `npm run demo`.
-
 ## Configuration
 
 ### JavaScript resource (api.js) parameters
