@@ -28,7 +28,7 @@ function respond(res, status, body, contentType = 'text/plain; charset=utf-8') {
 const server = http.createServer((req, res) => {
   const urlPath = req.url || '/';
   let filePath = urlPath === '/' ? '/demo/index.html' : urlPath;
-  if (filePath === '/demo') {
+  if (filePath === '/demo' || filePath === '/demo/') {
     filePath = '/demo/index.html';
   }
 
