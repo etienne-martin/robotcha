@@ -33,6 +33,14 @@ npm run demo
 
 Then open `http://localhost:4173/demo/`.
 
+## Dev Mode
+
+```bash
+npm run dev
+```
+
+This starts a watcher that rebuilds `dist/` on changes and serves the demo at `http://localhost:4173/demo/`.
+
 ## Usage
 
 ```html

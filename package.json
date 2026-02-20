@@ -27,7 +27,8 @@
     "build:js": "rollup -c",
     "build:types": "tsc -p tsconfig.types.json",
     "test": "node -e \"console.log('No tests yet')\"",
-    "demo": "npm run build && serve -l 4173 ."
+    "demo": "npm run build && serve -l 4173 .",
+    "dev": "concurrently -k -n build,serve -c cyan,magenta \"rollup -c -w\" \"serve -l 4173 .\""
   },
   "repository": {
     "type": "git",
@@ -46,7 +47,8 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.12.0",
     "typescript": "^5.3.3",
-    "serve": "^14.2.1"
+    "serve": "^14.2.1",
+    "concurrently": "^8.2.2"
   },
   "dependencies": {
     "@fingerprintjs/botd": "^2.0.0"
