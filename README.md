@@ -2,7 +2,7 @@
 
 **Robot‑Optimized Bot‑Only Turing Check for Human Absence**
 
-roboTCHA is a free client-side service that helps protect agent-first websites from humans. This README explains how to embed the widget, configure it, and integrate it into an agent-first flow.
+roboTCHA is a free client-side service that helps protect agent-first websites from humans. This guide explains how to embed the widget, configure it, and integrate it into an agent-first flow.
 
 ## Highlights
 
