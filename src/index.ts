@@ -352,6 +352,7 @@ function buildStyles(): HTMLStyleElement {
       font-size: 9px;
       letter-spacing: 0.4px;
       min-height: 12px;
+      margin-top: 0;
     }
 
     .rc-root.state-unchecked .rc-status {
