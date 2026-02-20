@@ -343,7 +343,7 @@ function buildStyles(): HTMLStyleElement {
     .rc-status {
       font-size: 11px;
       letter-spacing: 0.6px;
-      margin-top: 2px;
+      margin-top: 0;
       white-space: nowrap;
       min-height: 14px;
     }
@@ -352,7 +352,6 @@ function buildStyles(): HTMLStyleElement {
       font-size: 9px;
       letter-spacing: 0.4px;
       min-height: 12px;
-      margin-top: 0;
     }
 
     .rc-root.state-unchecked .rc-status {
