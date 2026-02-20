@@ -238,8 +238,10 @@ function buildStyles(): HTMLStyleElement {
     .rc-root {
       --rc-control-size: 28px;
       --rc-gap: 10px;
+      --rc-check-width: calc(var(--rc-control-size) * 0.78);
+      --rc-check-height: calc(var(--rc-control-size) * 0.42);
       --rc-check-stroke: 4px;
-      --rc-check-length: 100;
+      --rc-check-offset: -2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -414,27 +416,13 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-check {
-      width: 100%;
-      height: 100%;
+      width: var(--rc-check-width);
+      height: var(--rc-check-height);
+      border-left: var(--rc-check-stroke) solid #fff;
+      border-bottom: var(--rc-check-stroke) solid #fff;
+      transform: translateY(var(--rc-check-offset)) rotate(-45deg);
       opacity: 0;
       grid-area: 1 / 1;
-      display: block;
-    }
-
-    .rc-check svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .rc-check-path {
-      fill: none;
-      stroke: #ffffff;
-      stroke-width: var(--rc-check-stroke);
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: var(--rc-check-length);
-      stroke-dashoffset: var(--rc-check-length);
     }
 
     .rc-input:checked {
@@ -464,6 +452,15 @@ function buildStyles(): HTMLStyleElement {
       border-color: transparent;
     }
 
+    .rc-input:checked + .rc-box .rc-check {
+      opacity: 1;
+    }
+
+    .rc-root.state-solved .rc-check {
+      border-left-color: #00a357;
+      border-bottom-color: #00a357;
+    }
+
     .rc-spinner {
       width: 100%;
       height: 100%;
@@ -480,17 +477,12 @@ function buildStyles(): HTMLStyleElement {
       opacity: 1;
     }
 
-    .rc-root.state-checking .rc-input {
+    .rc-root.state-checking .rc-check {
       opacity: 0;
     }
 
-    .rc-root.state-solved .rc-check {
-      opacity: 1;
-    }
-
-    .rc-root.state-solved .rc-check-path {
-      stroke: #00a357;
-      animation: rc-draw-check 0.22s ease-out forwards;
+    .rc-root.state-checking .rc-input {
+      opacity: 0;
     }
 
     .rc-root.theme-dark {
@@ -548,12 +540,6 @@ function buildStyles(): HTMLStyleElement {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-
-    @keyframes rc-draw-check {
-      from { stroke-dashoffset: var(--rc-check-length); }
-      to { stroke-dashoffset: 0; }
-    }
-
   `;
   return style;
 }
@@ -578,15 +564,6 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
 
   const check = document.createElement('span');
   check.className = 'rc-check';
-  const checkSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  checkSvg.setAttribute('viewBox', '0 0 24 24');
-  checkSvg.setAttribute('aria-hidden', 'true');
-  const checkPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  checkPath.setAttribute('class', 'rc-check-path');
-  checkPath.setAttribute('d', 'M5 13l4 4L19 7');
-  checkPath.setAttribute('pathLength', '100');
-  checkSvg.append(checkPath);
-  check.append(checkSvg);
 
   const spinner = document.createElement('span');
   spinner.className = 'rc-spinner';
