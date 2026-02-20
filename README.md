@@ -154,6 +154,31 @@ This runs the same watcher as `npm run demo`.
 - `robotcha.reset(id)`
 - `robotcha.getResponse(id)`
 
+### JavaScript API
+
+**`robotcha.render(container, options)`**
+
+Renders the container as a roboTCHA widget and returns the widget id.
+
+`container` can be:
+
+- A DOM element
+- A string id of an element
+
+`options` is an object (see the table above). Example:
+
+```js
+robotcha.render('robotcha', { theme: 'light' });
+```
+
+**`robotcha.reset(id)`**
+
+Resets the widget. If `id` is omitted, all widgets are reset.
+
+**`robotcha.getResponse(id)`**
+
+Returns the token for the widget. If `id` is omitted or unsolved, returns an empty string.
+
 ## Notes
 
 - No server verification.
