@@ -27,7 +27,7 @@
     "build:js": "rollup -c",
     "build:types": "tsc -p tsconfig.types.json",
     "test": "node -e \"console.log('No tests yet')\"",
-    "demo": "concurrently -k -n build,serve -c cyan,magenta \"rollup -c -w\" \"serve -l 4173 .\"",
+    "demo": "concurrently -k -n build,serve -c cyan,magenta \"rollup -c -w\" \"serve -l 4173 -c serve.dev.json .\"",
     "dev": "npm run demo"
   },
   "repository": {
