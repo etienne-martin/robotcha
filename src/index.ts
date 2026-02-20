@@ -1,3 +1,5 @@
+import { load } from '@fingerprintjs/botd';
+
 export type RobotchaTheme = 'light' | 'dark';
 export type RobotchaSize = 'normal' | 'compact';
 
@@ -14,8 +16,37 @@ export interface RobotchaApi {
   getResponse(id?: number): string;
 }
 
+type WidgetState = 'unchecked' | 'checking' | 'solved' | 'unsolved';
+
+type Botd = Awaited<ReturnType<typeof load>>;
+
+type WidgetElements = {
+  root: HTMLDivElement;
+  button: HTMLButtonElement;
+  status: HTMLDivElement;
+};
+
+type WidgetInstance = {
+  id: number;
+  host: HTMLElement;
+  shadow: ShadowRoot;
+  options: RobotchaRenderOptions;
+  elements: WidgetElements;
+  state: WidgetState;
+  token: string;
+};
+
 let nextId = 0;
-const responses = new Map<number, string>();
+const instances = new Map<number, WidgetInstance>();
+let botdPromise: Promise<Botd> | null = null;
+
+const LABEL_TEXT = 'I AM A ROBOT';
+const STATUS_TEXT: Record<WidgetState, string> = {
+  unchecked: '',
+  checking: 'CHECKING...',
+  solved: 'VERIFIED ROBOT',
+  unsolved: 'HUMAN DETECTED'
+};
 
 function resolveContainer(container: Element | string): Element | null {
   if (typeof container === 'string') {
@@ -24,33 +55,403 @@ function resolveContainer(container: Element | string): Element | null {
   return container;
 }
 
-function render(container: Element | string, options: RobotchaRenderOptions = {}): number {
+function ensureBotd(): Promise<Botd> {
+  if (!botdPromise) {
+    botdPromise = load({ monitoring: false });
+  }
+  return botdPromise;
+}
+
+async function detectBot(): Promise<{ bot: boolean }>
+{
+  const botd = await ensureBotd();
+  const result = await botd.detect();
+  return { bot: Boolean(result?.bot) };
+}
+
+function generateToken(): string {
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let i = 0; i < bytes.length; i += 1) {
+      bytes[i] = Math.floor(Math.random() * 256);
+    }
+  }
+
+  const binary = String.fromCharCode(...bytes);
+  const base64 = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  return `rbt_${base64}`;
+}
+
+function setState(instance: WidgetInstance, state: WidgetState): void {
+  instance.state = state;
+  const { root, button, status } = instance.elements;
+
+  root.classList.remove('state-unchecked', 'state-checking', 'state-solved', 'state-unsolved');
+  root.classList.add(`state-${state}`);
+
+  status.textContent = STATUS_TEXT[state];
+  button.setAttribute('aria-checked', state === 'solved' ? 'true' : 'false');
+  button.setAttribute('aria-busy', state === 'checking' ? 'true' : 'false');
+  button.disabled = state === 'checking' || state === 'solved';
+}
+
+async function handleClick(instance: WidgetInstance): Promise<void> {
+  if (instance.state === 'checking' || instance.state === 'solved') {
+    return;
+  }
+
+  setState(instance, 'checking');
+
+  try {
+    const result = await detectBot();
+
+    if (result.bot) {
+      const token = generateToken();
+      instance.token = token;
+      setState(instance, 'solved');
+      instance.options.callback?.(token);
+    } else {
+      instance.token = '';
+      setState(instance, 'unsolved');
+    }
+  } catch (error) {
+    instance.token = '';
+    setState(instance, 'unchecked');
+    instance.options['error-callback']?.();
+  }
+}
+
+function buildStyles(): HTMLStyleElement {
+  const style = document.createElement('style');
+  style.textContent = `
+    :host {
+      all: initial;
+      display: inline-block;
+      font-family: Arial, sans-serif;
+      color: #222;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    .rc-root {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #d3d3d3;
+      border-radius: 4px;
+      padding: 10px 12px;
+      background: #f9f9f9;
+      user-select: none;
+      min-width: 220px;
+    }
+
+    .rc-root.size-compact {
+      gap: 8px;
+      padding: 6px 8px;
+      min-width: 180px;
+    }
+
+    .rc-checkbox {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #c1c1c1;
+      border-radius: 3px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      padding: 0;
+    }
+
+    .rc-root.size-compact .rc-checkbox {
+      width: 22px;
+      height: 22px;
+    }
+
+    .rc-checkbox:focus-visible {
+      outline: 2px solid #4d90fe;
+      outline-offset: 2px;
+    }
+
+    .rc-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rc-label {
+      font-size: 14px;
+      letter-spacing: 0.4px;
+    }
+
+    .rc-root.size-compact .rc-label {
+      font-size: 12px;
+    }
+
+    .rc-status {
+      font-size: 11px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      min-height: 14px;
+    }
+
+    .rc-root.state-unchecked .rc-status {
+      visibility: hidden;
+    }
+
+    .rc-root.state-checking .rc-status {
+      color: #5c6bc0;
+    }
+
+    .rc-root.state-solved .rc-status {
+      color: #2e7d32;
+    }
+
+    .rc-root.state-unsolved .rc-status {
+      color: #c62828;
+    }
+
+    .rc-check {
+      width: 12px;
+      height: 6px;
+      border-left: 3px solid #fff;
+      border-bottom: 3px solid #fff;
+      transform: rotate(-45deg);
+      opacity: 0;
+    }
+
+    .rc-root.state-solved .rc-checkbox {
+      background: #2e7d32;
+      border-color: #2e7d32;
+    }
+
+    .rc-root.state-solved .rc-check {
+      opacity: 1;
+    }
+
+    .rc-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      border-top-color: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      animation: rc-spin 0.8s linear infinite;
+      opacity: 0;
+      position: absolute;
+    }
+
+    .rc-root.state-checking .rc-spinner {
+      opacity: 1;
+    }
+
+    .rc-root.state-checking .rc-check {
+      opacity: 0;
+    }
+
+    .rc-root.theme-dark {
+      background: #2a2a2a;
+      border-color: #444;
+      color: #eee;
+    }
+
+    .rc-root.theme-dark .rc-checkbox {
+      background: #111;
+      border-color: #666;
+    }
+
+    .rc-root.theme-dark.state-solved .rc-checkbox {
+      background: #2e7d32;
+      border-color: #2e7d32;
+    }
+
+    .rc-root.theme-dark .rc-spinner {
+      border-color: rgba(255, 255, 255, 0.2);
+      border-top-color: rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes rc-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  `;
+  return style;
+}
+
+function buildWidget(options: RobotchaRenderOptions): WidgetElements {
+  const root = document.createElement('div');
+  root.className = 'rc-root';
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'rc-checkbox';
+  button.setAttribute('role', 'checkbox');
+  button.setAttribute('aria-checked', 'false');
+  button.setAttribute('aria-label', LABEL_TEXT);
+
+  const check = document.createElement('span');
+  check.className = 'rc-check';
+
+  const spinner = document.createElement('span');
+  spinner.className = 'rc-spinner';
+
+  button.append(check, spinner);
+
+  const text = document.createElement('div');
+  text.className = 'rc-text';
+
+  const label = document.createElement('div');
+  label.className = 'rc-label';
+  label.textContent = LABEL_TEXT;
+
+  const status = document.createElement('div');
+  status.className = 'rc-status';
+
+  text.append(label, status);
+  root.append(button, text);
+
+  const theme = options.theme === 'dark' ? 'dark' : 'light';
+  const size = options.size === 'compact' ? 'compact' : 'normal';
+  root.classList.add(`theme-${theme}`, `size-${size}`, 'state-unchecked');
+
+  return { root, button, status };
+}
+
+function createInstance(container: Element, options: RobotchaRenderOptions): WidgetInstance | null {
+  if (!('attachShadow' in HTMLElement.prototype)) {
+    options['error-callback']?.();
+    return null;
+  }
+
+  const host = document.createElement('div');
+  host.className = 'robotcha-host';
+  (container as HTMLElement).textContent = '';
+  container.appendChild(host);
+
+  let shadow: ShadowRoot;
+  try {
+    shadow = host.attachShadow({ mode: 'open' });
+  } catch (error) {
+    options['error-callback']?.();
+    return null;
+  }
+
+  const elements = buildWidget(options);
+  shadow.append(buildStyles(), elements.root);
+
+  const id = ++nextId;
+  const instance: WidgetInstance = {
+    id,
+    host,
+    shadow,
+    options,
+    elements,
+    state: 'unchecked',
+    token: ''
+  };
+
+  const onClick = () => void handleClick(instance);
+  elements.button.addEventListener('click', onClick);
+  elements.button.addEventListener('keydown', (event) => {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      onClick();
+    }
+  });
+
+  return instance;
+}
+
+export function render(container: Element | string, options: RobotchaRenderOptions = {}): number {
+  if (typeof document === 'undefined') {
+    options['error-callback']?.();
+    return -1;
+  }
+
   const target = resolveContainer(container);
   if (!target) {
     options['error-callback']?.();
     return -1;
   }
 
-  const id = ++nextId;
-  responses.set(id, '');
-  return id;
+  const instance = createInstance(target, options);
+  if (!instance) {
+    return -1;
+  }
+
+  instances.set(instance.id, instance);
+  return instance.id;
 }
 
-function reset(id?: number): void {
+export function reset(id?: number): void {
   if (typeof id === 'number') {
-    responses.set(id, '');
+    const instance = instances.get(id);
+    if (!instance) {
+      return;
+    }
+    instance.token = '';
+    setState(instance, 'unchecked');
     return;
   }
 
-  responses.clear();
+  instances.forEach((instance) => {
+    instance.token = '';
+    setState(instance, 'unchecked');
+  });
 }
 
-function getResponse(id?: number): string {
+export function getResponse(id?: number): string {
   if (typeof id !== 'number') {
     return '';
   }
 
-  return responses.get(id) ?? '';
+  return instances.get(id)?.token ?? '';
+}
+
+function parseOptionsFromDataset(element: HTMLElement): RobotchaRenderOptions {
+  const options: RobotchaRenderOptions = {};
+
+  const theme = element.getAttribute('data-theme');
+  if (theme === 'light' || theme === 'dark') {
+    options.theme = theme;
+  }
+
+  const size = element.getAttribute('data-size');
+  if (size === 'normal' || size === 'compact') {
+    options.size = size;
+  }
+
+  const callbackName = element.getAttribute('data-callback');
+  if (callbackName && typeof (window as any)[callbackName] === 'function') {
+    options.callback = (window as any)[callbackName] as (token: string) => void;
+  }
+
+  const errorCallbackName = element.getAttribute('data-error-callback');
+  if (errorCallbackName && typeof (window as any)[errorCallbackName] === 'function') {
+    options['error-callback'] = (window as any)[errorCallbackName] as () => void;
+  }
+
+  return options;
+}
+
+function autoRender(): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>('.g-robotcha'));
+  nodes.forEach((node) => {
+    if (node.dataset.robotchaRendered === 'true') {
+      return;
+    }
+    node.dataset.robotchaRendered = 'true';
+    render(node, parseOptionsFromDataset(node));
+  });
 }
 
 const robotcha: RobotchaApi = {
@@ -58,5 +459,17 @@ const robotcha: RobotchaApi = {
   reset,
   getResponse
 };
+
+if (typeof window !== 'undefined') {
+  (window as any).robotcha = robotcha;
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', autoRender, { once: true });
+    } else {
+      autoRender();
+    }
+  }
+}
 
 export default robotcha;
