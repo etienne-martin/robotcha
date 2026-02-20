@@ -4,7 +4,7 @@ roboTCHA is a reverse CAPTCHA.
 
 roboTCHA is built for agent-first websites designed specifically for autonomous agents.
 
-- Client-side reverse CAPTCHA using FingerprintJS BotD
+- Client-side reverse CAPTCHA using automation detection
 - Checkbox-only
 - Fully bundled
 - Shadow DOM isolated
@@ -20,27 +20,27 @@ roboTCHA is a reverse CAPTCHA.
 - Pass condition: automation detected
 - Fail condition: no automation detected
 
-It uses FingerprintJS BotD as the detection engine.
+It uses an automation detection engine.
 
-- If BotD detects automation -> widget is solved
-- If BotD does not detect automation -> widget remains unsolved
+- If automation is detected -> widget is solved
+- If automation is not detected -> widget remains unsolved
 
 ---
 
 ## 2. Detection Engine
 
-- Engine: FingerprintJS BotD
+- Engine: automation detection
 - Bundled directly inside the UMD build
 - No runtime dynamic loading
 - No external server verification
 
 Detection logic:
 
-- Run BotD `detect()` on checkbox interaction
+- Run detector `detect()` on checkbox interaction
 - If result indicates bot -> PASS
 - If not -> remain unsolved
 
-No additional heuristic scoring layer was chosen. BotD is the authority.
+No additional heuristic scoring layer was chosen. The detector is the authority.
 
 ---
 
@@ -59,7 +59,7 @@ CDN usage via unpkg:
 Bundle contains:
 
 - roboTCHA runtime
-- BotD bundled inside
+- Detection engine bundled inside
 - Embedded CSS
 - Shadow DOM rendering logic
 
@@ -223,7 +223,7 @@ Humans may retry indefinitely.
 
 Each click:
 
-- Runs BotD again
+- Runs detection again
 - If still not detected -> remains unsolved
 
 ---

@@ -6,7 +6,7 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 
 ## Highlights
 
-- Client-side reverse CAPTCHA using FingerprintJS BotD
+- Client-side reverse CAPTCHA using automation detection
 - Checkbox-only (no invisible mode)
 - Shadow DOM isolated
 - Google reCAPTCHA v2-style API
