@@ -145,11 +145,10 @@ This runs the same watcher as `npm run demo`.
 | --- | --- | --- |
 | `onload` | _optional_ | The name of your callback function to be executed once all the dependencies have loaded. |
 | `render` | `explicit` \| `onload` | Whether to render the widget explicitly. Defaults to `onload`, which renders the widget in the first `e-robotcha` tag it finds. |
-| `hl` | _not supported_ | Language override is not supported. |
 
-### g-recaptcha tag attributes and grecaptcha.render parameters
+### e-robotcha tag attributes and robotcha.render parameters
 
-| g-recaptcha tag attribute | grecaptcha.render parameter | Value | Default | Description |
+| e-robotcha tag attribute | robotcha.render parameter | Value | Default | Description |
 | --- | --- | --- | --- | --- |
 | `data-sitekey` | `sitekey` | any string | _none_ | Cosmetic only (no server verification). |
 | `data-theme` | `theme` | `dark` \| `light` | `light` | Optional. The color theme of the widget. |
