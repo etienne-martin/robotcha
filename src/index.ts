@@ -242,7 +242,7 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.state-unchecked .rc-status {
-      visibility: hidden;
+      display: none;
     }
 
     .rc-root.state-checking .rc-status {
