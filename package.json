@@ -19,7 +19,6 @@
   "files": [
     "dist",
     "README.md",
-    "SPEC.md",
     "demo"
   ],
   "scripts": {
