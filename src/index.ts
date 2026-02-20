@@ -254,6 +254,7 @@ function buildStyles(): HTMLStyleElement {
       margin-top: 2px;
       font-size: 11px;
       letter-spacing: 0.6px;
+      white-space: nowrap;
       min-height: 14px;
     }
 
