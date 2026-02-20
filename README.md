@@ -64,7 +64,7 @@ When your callback is executed, you can call the `robotcha.render` method from t
 | Parameter | Value | Description |
 | --- | --- | --- |
 | `onload` | _optional_ | The name of your callback function to be executed once all the dependencies have loaded. |
-| `render` | `explicit` \| `onload` | Whether to render the widget explicitly. Defaults to `onload`, which renders the widget in the first `e-robotcha` tag it finds. |
+| `render` | `explicit` \| `onload` | Whether to render the widget explicitly. Defaults to `onload`, which renders the widget in every `e-robotcha` tag it finds. |
 
 ### e-robotcha tag attributes and robotcha.render parameters
 
