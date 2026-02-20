@@ -41,7 +41,7 @@ let nextId = 0;
 const instances = new Map<number, WidgetInstance>();
 let botdPromise: Promise<Botd> | null = null;
 
-const LABEL_TEXT = "I'm a robot";
+const LABEL_TEXT = 'I am a robot';
 const STATUS_TEXT: Record<WidgetState, string> = {
   unchecked: '',
   checking: 'Checking...',
