@@ -3,7 +3,7 @@ name: publish
 on:
   workflow_call:
     secrets:
-      NPM_TOKEN:
+      NPM_AUTH_TOKEN:
         required: false
 
 permissions:
@@ -32,4 +32,4 @@ jobs:
       - name: Publish
         run: bash scripts/publish.sh
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
