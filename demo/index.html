@@ -23,6 +23,19 @@
         margin: 0 0 24px;
         color: #4b5563;
       }
+      .debug {
+        margin: 0 0 20px;
+        font-size: 13px;
+        color: #374151;
+      }
+      .debug a {
+        color: #1d4ed8;
+        text-decoration: none;
+        margin-right: 12px;
+      }
+      .debug a:hover {
+        text-decoration: underline;
+      }
       .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -66,6 +79,13 @@
   <body>
     <h1>roboTCHA Local Demo</h1>
     <p>Open the console to see callbacks fire. Use the buttons to reset.</p>
+    <div class="debug">
+      Debug override:
+      <a href="?robotcha_debug=bot">Force robot</a>
+      <a href="?robotcha_debug=human">Force human</a>
+      <a href="?robotcha_debug=error">Force error</a>
+      <a href="./index.html">Clear</a>
+    </div>
 
     <div class="grid">
       <div class="card">
@@ -121,8 +141,13 @@
       });
 
       document.getElementById('reset-auto').addEventListener('click', () => {
-        const response = robotcha.getResponse();
-        robotcha.reset();
+        const autoNode = document.querySelector('.g-robotcha');
+        const idAttr = autoNode?.dataset?.robotchaId;
+        const autoId = idAttr ? Number(idAttr) : -1;
+        const response = autoId >= 0 ? robotcha.getResponse(autoId) : '';
+        if (autoId >= 0) {
+          robotcha.reset(autoId);
+        }
         logLine(`auto reset (prev response: ${response || 'empty'})`);
       });
     </script>

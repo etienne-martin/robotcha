@@ -25,6 +25,74 @@ Or via unpkg:
 <script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
 ```
 
+## Usage
+
+**Script tag (global)**
+
+```html
+<div id="robotcha"></div>
+<script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
+<script>
+  const id = robotcha.render(document.getElementById('robotcha'), {
+    theme: 'light',
+    size: 'normal',
+    callback: (token) => {
+      console.log('Solved:', token);
+    },
+    'error-callback': () => {
+      console.error('roboTCHA failed to initialize');
+    }
+  });
+</script>
+```
+
+**ESM**
+
+```ts
+import robotcha from 'robotcha';
+
+const id = robotcha.render('#robotcha', {
+  theme: 'dark',
+  size: 'compact',
+  callback: (token) => console.log('Solved:', token)
+});
+```
+
+**CommonJS**
+
+```js
+const robotcha = require('robotcha');
+
+const id = robotcha.render(document.getElementById('robotcha'), {
+  callback: (token) => console.log('Solved:', token)
+});
+```
+
+**Auto-render (data attributes)**
+
+```html
+<div
+  class="g-robotcha"
+  data-sitekey="robot-public"
+  data-theme="light"
+  data-size="normal"
+  data-callback="onRobotcha"
+  data-error-callback="onRobotchaError"
+></div>
+<script>
+  window.onRobotcha = (token) => console.log('Solved:', token);
+  window.onRobotchaError = () => console.error('roboTCHA failed to initialize');
+</script>
+```
+
+**Reset / getResponse**
+
+```js
+const id = robotcha.render('#robotcha');
+const token = robotcha.getResponse(id);
+robotcha.reset(id);
+```
+
 ## Local Demo
 
 ```bash
@@ -40,24 +108,6 @@ npm run dev
 ```
 
 This runs the same watcher as `npm run demo`.
-
-## Usage
-
-```html
-<div id="robotcha"></div>
-<script>
-  const id = robotcha.render(document.getElementById('robotcha'), {
-    theme: 'light',
-    size: 'normal',
-    callback: (token) => {
-      console.log('Solved:', token);
-    },
-    'error-callback': () => {
-      console.error('roboTCHA failed to initialize');
-    }
-  });
-</script>
-```
 
 ## API
 

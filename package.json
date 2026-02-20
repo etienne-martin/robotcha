@@ -38,7 +38,7 @@
     "url": "https://github.com/etienne-martin/robotcha/issues"
   },
   "homepage": "https://github.com/etienne-martin/robotcha#readme",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "tslib": "^2.6.2",
     "@rollup/plugin-commonjs": "^25.0.7",

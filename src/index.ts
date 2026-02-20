@@ -41,6 +41,10 @@ let nextId = 0;
 const instances = new Map<number, WidgetInstance>();
 let botdPromise: Promise<Botd> | null = null;
 
+const REPO_HOME = 'https://github.com/etienne-martin/robotcha';
+const PRIVACY_URL = `${REPO_HOME}/blob/develop/PRIVACY.md`;
+const LICENSE_URL = `${REPO_HOME}/blob/develop/LICENSE`;
+
 const LABEL_TEXT = 'I am a robot';
 const STATUS_TEXT: Record<WidgetState, string> = {
   unchecked: '',
@@ -63,8 +67,41 @@ function ensureBotd(): Promise<Botd> {
   return botdPromise;
 }
 
+type DebugOverride = 'bot' | 'human' | 'error' | null;
+
+function getDebugOverride(): DebugOverride {
+  if (typeof window === 'undefined' || typeof location === 'undefined') {
+    return null;
+  }
+
+  const hostname = location.hostname;
+  const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]' || hostname === '';
+  if (!isLocal) {
+    return null;
+  }
+
+  const params = new URLSearchParams(location.search);
+  const value = params.get('robotcha_debug');
+  if (value === 'bot' || value === 'human' || value === 'error') {
+    return value;
+  }
+
+  return null;
+}
+
 async function detectBot(): Promise<{ bot: boolean }>
 {
+  const override = getDebugOverride();
+  if (override === 'bot') {
+    return { bot: true };
+  }
+  if (override === 'human') {
+    return { bot: false };
+  }
+  if (override === 'error') {
+    throw new Error('debug override');
+  }
+
   const botd = await ensureBotd();
   const result = await botd.detect();
   return { bot: Boolean(result?.bot) };
@@ -77,7 +114,7 @@ function wait(ms: number): Promise<void> {
 }
 
 function randomDelay(): number {
-  return 300 + Math.floor(Math.random() * 201);
+  return 1000 + Math.floor(Math.random() * 1001);
 }
 
 function generateToken(): string {
@@ -104,8 +141,19 @@ function setState(instance: WidgetInstance, state: WidgetState): void {
 
   status.textContent = STATUS_TEXT[state];
   input.checked = state === 'solved';
-  input.disabled = state === 'checking' || state === 'solved';
   input.setAttribute('aria-busy', state === 'checking' ? 'true' : 'false');
+  if (state === 'solved') {
+    input.setAttribute('aria-disabled', 'true');
+  } else {
+    input.removeAttribute('aria-disabled');
+  }
+}
+
+function focusInput(instance: WidgetInstance): void {
+  const { input } = instance.elements;
+  if (input.isConnected) {
+    input.focus({ preventScroll: true });
+  }
 }
 
 async function handleClick(instance: WidgetInstance): Promise<void> {
@@ -135,6 +183,8 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
     setState(instance, 'unchecked');
     instance.options['error-callback']?.();
   }
+
+  focusInput(instance);
 }
 
 function buildStyles(): HTMLStyleElement {
@@ -154,13 +204,17 @@ function buildStyles(): HTMLStyleElement {
     .rc-root {
       --rc-control-size: 28px;
       --rc-gap: 10px;
+      --rc-check-width: calc(var(--rc-control-size) * 0.78);
+      --rc-check-height: calc(var(--rc-control-size) * 0.42);
+      --rc-check-stroke: 4px;
+      --rc-check-offset: -2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 0;
       border: 1px solid #d3d3d3;
       border-radius: 4px;
-      padding: 10px 12px;
+      padding: 0;
       background: #f9f9f9;
       user-select: none;
       width: 304px;
@@ -170,7 +224,7 @@ function buildStyles(): HTMLStyleElement {
     .rc-root.size-compact {
       --rc-control-size: 22px;
       --rc-gap: 8px;
-      padding: 6px 8px;
+      --rc-check-stroke: 3px;
       width: 220px;
       height: 60px;
     }
@@ -179,8 +233,15 @@ function buildStyles(): HTMLStyleElement {
       display: flex;
       align-items: center;
       gap: var(--rc-gap);
-      cursor: pointer;
+      cursor: default;
       flex: 1;
+      align-self: stretch;
+      height: 100%;
+      padding: 10px 12px;
+    }
+
+    .rc-root.size-compact .rc-label {
+      padding: 6px 8px;
     }
 
     .rc-control {
@@ -200,13 +261,19 @@ function buildStyles(): HTMLStyleElement {
       border: 2px solid #c1c1c1;
       border-radius: 3px;
       background: #fff;
-      cursor: pointer;
+      cursor: default;
       display: block;
     }
 
-    .rc-input:focus-visible {
-      outline: 2px solid #4d90fe;
-      outline-offset: 2px;
+    .rc-label:hover .rc-input,
+    .rc-label:focus-within .rc-input {
+      border-color: #4d90fe;
+      background: #f5f9ff;
+    }
+
+    .rc-input:focus-visible,
+    .rc-input:focus {
+      outline: none;
     }
 
     .rc-box {
@@ -221,7 +288,7 @@ function buildStyles(): HTMLStyleElement {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 2px;
+      gap: 0;
       min-height: var(--rc-control-size);
     }
 
@@ -252,11 +319,11 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.state-checking .rc-status {
-      color: #5c6bc0;
+      color: #9aa0a6;
     }
 
     .rc-root.state-solved .rc-status {
-      color: #2e7d32;
+      color: #00a357;
     }
 
     .rc-root.state-unsolved .rc-status {
@@ -271,8 +338,12 @@ function buildStyles(): HTMLStyleElement {
       font-size: 10px;
       color: #6b7280;
       line-height: 1.1;
+      padding: 10px 12px;
     }
 
+    .rc-root.size-compact .rc-brand {
+      padding: 6px 8px;
+    }
     .rc-brand-icon {
       width: 28px;
       height: 28px;
@@ -301,19 +372,33 @@ function buildStyles(): HTMLStyleElement {
       color: #9aa0a6;
     }
 
+    .rc-brand-links a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .rc-brand-links a:hover {
+      text-decoration: underline;
+    }
+
     .rc-check {
-      width: 12px;
-      height: 6px;
-      border-left: 3px solid #fff;
-      border-bottom: 3px solid #fff;
-      transform: rotate(-45deg);
+      width: var(--rc-check-width);
+      height: var(--rc-check-height);
+      border-left: var(--rc-check-stroke) solid #fff;
+      border-bottom: var(--rc-check-stroke) solid #fff;
+      transform: translateY(var(--rc-check-offset)) rotate(-45deg);
       opacity: 0;
       grid-area: 1 / 1;
     }
 
     .rc-input:checked {
-      background: #2e7d32;
-      border-color: #2e7d32;
+      background: #00a357;
+      border-color: #00a357;
+    }
+
+    .rc-root.state-solved .rc-input {
+      background: transparent;
+      border-color: transparent;
     }
 
     .rc-root.state-unsolved .rc-input {
@@ -321,15 +406,32 @@ function buildStyles(): HTMLStyleElement {
       border-color: #c62828;
     }
 
+    .rc-root.state-unsolved .rc-label:hover .rc-input,
+    .rc-root.state-unsolved .rc-label:focus-within .rc-input {
+      background: #ffebee;
+      border-color: #c62828;
+    }
+
+    .rc-root.state-solved .rc-label:hover .rc-input,
+    .rc-root.state-solved .rc-label:focus-within .rc-input {
+      background: transparent;
+      border-color: transparent;
+    }
+
     .rc-input:checked + .rc-box .rc-check {
       opacity: 1;
+    }
+
+    .rc-root.state-solved .rc-check {
+      border-left-color: #00a357;
+      border-bottom-color: #00a357;
     }
 
     .rc-spinner {
       width: 100%;
       height: 100%;
-      border: 3px solid rgba(0, 0, 0, 0.2);
-      border-top-color: rgba(0, 0, 0, 0.6);
+      border: 3px solid rgba(77, 144, 254, 0.35);
+      border-top-color: rgba(77, 144, 254, 0.95);
       border-radius: 50%;
       animation: rc-spin 0.8s linear infinite;
       opacity: 0;
@@ -368,9 +470,20 @@ function buildStyles(): HTMLStyleElement {
       border-color: #666;
     }
 
+    .rc-root.theme-dark .rc-label:hover .rc-input,
+    .rc-root.theme-dark .rc-label:focus-within .rc-input {
+      background: #1a1f2b;
+      border-color: #8ab4f8;
+    }
+
     .rc-root.theme-dark .rc-input:checked {
-      background: #2e7d32;
-      border-color: #2e7d32;
+      background: #00a357;
+      border-color: #00a357;
+    }
+
+    .rc-root.theme-dark.state-solved .rc-input {
+      background: transparent;
+      border-color: transparent;
     }
 
     .rc-root.theme-dark.state-unsolved .rc-input {
@@ -378,9 +491,15 @@ function buildStyles(): HTMLStyleElement {
       border-color: #e57373;
     }
 
+    .rc-root.theme-dark.state-solved .rc-label:hover .rc-input,
+    .rc-root.theme-dark.state-solved .rc-label:focus-within .rc-input {
+      background: transparent;
+      border-color: transparent;
+    }
+
     .rc-root.theme-dark .rc-spinner {
-      border-color: rgba(255, 255, 255, 0.25);
-      border-top-color: rgba(255, 255, 255, 0.8);
+      border-color: rgba(138, 180, 248, 0.35);
+      border-top-color: rgba(138, 180, 248, 0.95);
     }
 
     @keyframes rc-spin {
@@ -443,7 +562,21 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
 
   const brandLinks = document.createElement('div');
   brandLinks.className = 'rc-brand-links';
-  brandLinks.textContent = 'Privacy - Terms';
+  const privacyLink = document.createElement('a');
+  privacyLink.href = PRIVACY_URL;
+  privacyLink.target = '_blank';
+  privacyLink.rel = 'noopener noreferrer';
+  privacyLink.textContent = 'Privacy';
+
+  const separator = document.createTextNode(' - ');
+
+  const licenseLink = document.createElement('a');
+  licenseLink.href = LICENSE_URL;
+  licenseLink.target = '_blank';
+  licenseLink.rel = 'noopener noreferrer';
+  licenseLink.textContent = 'License';
+
+  brandLinks.append(privacyLink, separator, licenseLink);
 
   brand.append(brandIcon, brandText, brandLinks);
   root.append(brand);
@@ -494,6 +627,11 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
   };
 
   elements.label.addEventListener('click', onActivate);
+  elements.input.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    void handleClick(instance);
+  });
   elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
@@ -587,7 +725,10 @@ function autoRender(): void {
       return;
     }
     node.dataset.robotchaRendered = 'true';
-    render(node, parseOptionsFromDataset(node));
+    const id = render(node, parseOptionsFromDataset(node));
+    if (id >= 0) {
+      node.dataset.robotchaId = String(id);
+    }
   });
 }
 
