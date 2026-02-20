@@ -41,6 +41,7 @@ type WidgetInstance = {
 let nextId = 0;
 const instances = new Map<number, WidgetInstance>();
 let botdPromise: Promise<Botd> | null = null;
+let focusListenerBound = false;
 
 const REPO_HOME = 'https://github.com/etienne-martin/robotcha';
 const PRIVACY_URL = `${REPO_HOME}/blob/HEAD/PRIVACY.md`;
@@ -669,18 +670,30 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     event.stopPropagation();
     void handleClick(instance);
   });
-  elements.input.addEventListener('blur', () => {
-    if (instance.state === 'unsolved') {
-      instance.token = '';
-      setState(instance, 'unchecked');
-    }
-  });
   elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       void handleClick(instance);
     }
   });
+
+  if (!focusListenerBound && typeof document !== 'undefined') {
+    focusListenerBound = true;
+    document.addEventListener('focusin', (event) => {
+      const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+      const target = event.target as Node | null;
+      instances.forEach((entry) => {
+        if (entry.state !== 'unsolved') {
+          return;
+        }
+        const isInside = (target && entry.host.contains(target)) || path.includes(entry.host);
+        if (!isInside) {
+          entry.token = '';
+          setState(entry, 'unchecked');
+        }
+      });
+    });
+  }
 
   return instance;
 }
