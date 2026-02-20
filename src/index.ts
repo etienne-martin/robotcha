@@ -69,6 +69,16 @@ async function detectBot(): Promise<{ bot: boolean }>
   return { bot: Boolean(result?.bot) };
 }
 
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function randomDelay(): number {
+  return 300 + Math.floor(Math.random() * 201);
+}
+
 function generateToken(): string {
   const bytes = new Uint8Array(16);
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
@@ -103,9 +113,11 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
   }
 
   setState(instance, 'checking');
+  const delay = wait(randomDelay());
 
   try {
     const result = await detectBot();
+    await delay;
 
     if (result.bot) {
       const token = generateToken();
@@ -117,6 +129,7 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
       setState(instance, 'unsolved');
     }
   } catch (error) {
+    await delay;
     instance.token = '';
     setState(instance, 'unchecked');
     instance.options['error-callback']?.();
@@ -231,6 +244,11 @@ function buildStyles(): HTMLStyleElement {
       border-color: #2e7d32;
     }
 
+    .rc-root.state-unsolved .rc-checkbox {
+      background: #ffebee;
+      border-color: #c62828;
+    }
+
     .rc-root.state-solved .rc-check {
       opacity: 1;
     }
@@ -268,6 +286,11 @@ function buildStyles(): HTMLStyleElement {
     .rc-root.theme-dark.state-solved .rc-checkbox {
       background: #2e7d32;
       border-color: #2e7d32;
+    }
+
+    .rc-root.theme-dark.state-unsolved .rc-checkbox {
+      background: #3a1d1d;
+      border-color: #e57373;
     }
 
     .rc-root.theme-dark .rc-spinner {

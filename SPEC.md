@@ -39,6 +39,7 @@ Detection logic:
 - Run detector `detect()` on checkbox interaction
 - If result indicates bot -> PASS
 - If not -> remain unsolved
+- Force a brief checking state between 300ms and 500ms per click
 
 No additional heuristic scoring layer was chosen. The detector is the authority.
 
@@ -248,5 +249,6 @@ States inside the widget:
 2. Checking
 3. Solved (green check, VERIFIED ROBOT)
 4. Unsolved after check (HUMAN DETECTED, but not “failed” in API terms)
+   Checkbox shows a red error state and does not check
 
 Only solved triggers callback.
