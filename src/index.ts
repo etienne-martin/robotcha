@@ -806,17 +806,18 @@ function autoRender(): void {
     return;
   }
 
-  const nodes = Array.from(document.querySelectorAll<HTMLElement>('.e-robotcha'));
-  nodes.forEach((node) => {
-    if (node.dataset.robotchaRendered === 'true') {
-      return;
-    }
-    node.dataset.robotchaRendered = 'true';
-    const id = render(node, parseOptionsFromDataset(node));
-    if (id >= 0) {
-      node.dataset.robotchaId = String(id);
-    }
-  });
+  const node = document.querySelector<HTMLElement>('.e-robotcha');
+  if (!node) {
+    return;
+  }
+  if (node.dataset.robotchaRendered === 'true') {
+    return;
+  }
+  node.dataset.robotchaRendered = 'true';
+  const id = render(node, parseOptionsFromDataset(node));
+  if (id >= 0) {
+    node.dataset.robotchaId = String(id);
+  }
 }
 
 const robotcha: RobotchaApi = {
