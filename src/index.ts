@@ -325,7 +325,7 @@ function buildStyles(): HTMLStyleElement {
     .rc-spinner {
       width: 100%;
       height: 100%;
-      border: 2px solid rgba(0, 0, 0, 0.2);
+      border: 3px solid rgba(0, 0, 0, 0.2);
       border-top-color: rgba(0, 0, 0, 0.6);
       border-radius: 50%;
       animation: rc-spin 0.8s linear infinite;
@@ -372,8 +372,8 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.theme-dark .rc-spinner {
-      border-color: rgba(255, 255, 255, 0.2);
-      border-top-color: rgba(255, 255, 255, 0.7);
+      border-color: rgba(255, 255, 255, 0.25);
+      border-top-color: rgba(255, 255, 255, 0.8);
     }
 
     @keyframes rc-spin {
