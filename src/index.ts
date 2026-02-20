@@ -6,6 +6,7 @@ export type RobotchaSize = 'normal' | 'compact';
 export interface RobotchaRenderOptions {
   theme?: RobotchaTheme;
   size?: RobotchaSize;
+  tabindex?: number;
   callback?: (token: string) => void;
   'error-callback'?: () => void;
 }
@@ -557,6 +558,9 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   input.type = 'checkbox';
   input.className = 'rc-input';
   input.setAttribute('aria-label', LABEL_TEXT);
+  if (typeof options.tabindex === 'number' && Number.isFinite(options.tabindex)) {
+    input.tabIndex = options.tabindex;
+  }
 
   const check = document.createElement('span');
   check.className = 'rc-check';
@@ -732,6 +736,14 @@ function parseOptionsFromDataset(element: HTMLElement): RobotchaRenderOptions {
   const size = element.getAttribute('data-size');
   if (size === 'normal' || size === 'compact') {
     options.size = size;
+  }
+
+  const tabindexValue = element.getAttribute('data-tabindex');
+  if (tabindexValue !== null) {
+    const parsed = Number.parseInt(tabindexValue, 10);
+    if (Number.isFinite(parsed)) {
+      options.tabindex = parsed;
+    }
   }
 
   const callbackName = element.getAttribute('data-callback');

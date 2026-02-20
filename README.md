@@ -72,7 +72,7 @@ When your callback is executed, you can call the `robotcha.render` method from t
 | --- | --- | --- | --- | --- |
 | `data-theme` | `theme` | `dark` \| `light` | `light` | Optional. The color theme of the widget. |
 | `data-size` | `size` | `compact` \| `normal` | `normal` | Optional. The size of the widget. |
-| `data-tabindex` | `tabindex` | _not supported_ | _none_ | Optional. Tabindex override is not supported. |
+| `data-tabindex` | `tabindex` | number | `0` | Optional. Tabindex override for keyboard navigation. |
 | `data-callback` | `callback` | function name | _none_ | Optional. The name of your callback function, executed when automation is detected. The token is passed to your callback. |
 | `data-error-callback` | `error-callback` | function name | _none_ | Optional. The name of your callback function, executed when roboTCHA encounters a runtime error. |
 
