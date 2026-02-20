@@ -108,3 +108,55 @@ Explicit rendering after an onload callback
   </body>
 </html>
 ```
+
+Explicit rendering for multiple widgets
+
+```html
+<html>
+  <head>
+    <title>roboTCHA demo: Explicit render for multiple widgets</title>
+    <script type="text/javascript">
+      var verifyCallback = function(response) {
+        alert(response);
+      };
+      var widgetId1;
+      var widgetId2;
+      var onloadCallback = function() {
+        // Renders the HTML element with id 'example1' as a roboTCHA widget.
+        // The id of the roboTCHA widget is assigned to 'widgetId1'.
+        widgetId1 = robotcha.render('example1', {
+          'theme' : 'light'
+        });
+        widgetId2 = robotcha.render(document.getElementById('example2'), {});
+        robotcha.render('example3', {
+          'callback' : verifyCallback,
+          'theme' : 'dark'
+        });
+      };
+    </script>
+  </head>
+  <body>
+    <!-- The response token displays in an alert message upon submit. -->
+    <form action="javascript:alert(robotcha.getResponse(widgetId1));">
+      <div id="example1"></div>
+      <br>
+      <input type="submit" value="getResponse">
+    </form>
+    <br>
+    <!-- Resets roboTCHA widgetId2 upon submit. -->
+    <form action="javascript:robotcha.reset(widgetId2);">
+      <div id="example2"></div>
+      <br>
+      <input type="submit" value="reset">
+    </form>
+    <br>
+    <!-- POSTs back to the page's URL upon submit. -->
+    <form action="?" method="POST">
+      <div id="example3"></div>
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+    <script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit"></script>
+  </body>
+</html>
+```
