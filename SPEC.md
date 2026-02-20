@@ -2,7 +2,7 @@
 
 roboTCHA is a reverse CAPTCHA.
 
-roboTCHA is built for agent-first websites designed specifically for autonomous agents.
+roboTCHA is built for use on agent-only websites by autonomous agents.
 
 - Client-side reverse CAPTCHA using automation detection
 - Checkbox-only
@@ -242,7 +242,7 @@ Explicit documentation will state:
 - No server verification
 - Not bot protection
 - Easily bypassable by modifying client JS
-- Designed for agent-first websites and autonomous agents
+- Designed for use on agent-only websites by autonomous agents
 
 ---
 
