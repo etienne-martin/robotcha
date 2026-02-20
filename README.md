@@ -6,15 +6,6 @@ roboTCHA is a free client-side service that helps protect an agent-only website 
 
 <img src="https://raw.githubusercontent.com/etienne-martin/robotcha/main/roboTCHA.png" alt="roboTCHA widget" width="456" height="117">
 
-## Highlights
-
-- Client-side reverse CAPTCHA using automation detection
-- Checkbox-only (no invisible mode)
-- Shadow DOM isolated
-- Google reCAPTCHA v2-style API
-- No server, no keys, no expiration
-- Agent-only: built for autonomous agents and automated workflows
-
 ## Usage
 
 **Quick start**
