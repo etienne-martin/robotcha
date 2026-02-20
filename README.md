@@ -113,17 +113,6 @@ const id = robotcha.render('#robotcha', {
 </script>
 ```
 
-**Auto-render attributes and render options**
-
-| Auto-render attribute | `robotcha.render` option | Values | Default | Description |
-| --- | --- | --- | --- | --- |
-| `data-sitekey` | _none_ | any string | _none_ | Cosmetic only (no server verification). |
-| `data-theme` | `theme` | `light` \| `dark` | `light` | Widget theme. |
-| `data-size` | `size` | `normal` \| `compact` | `normal` | Widget size. |
-| `data-callback` | `callback` | function name | _none_ | Called with token when automation is detected. |
-| `data-error-callback` | `error-callback` | function name | _none_ | Called on runtime errors. |
-
-
 **Reset / getResponse**
 
 ```js
@@ -148,13 +137,49 @@ npm run dev
 
 This runs the same watcher as `npm run demo`.
 
-## API
+## Configuration
 
-| Method | Description | Parameters |
+### JavaScript resource (api.js) parameters
+
+| Parameter | Value | Description |
 | --- | --- | --- |
-| `robotcha.render(container, options)` | Renders the container as a roboTCHA widget and returns the widget id. | `container`: DOM element or element id string. `options`: object (see the table above). |
-| `robotcha.reset(id)` | Resets a widget. | `id` optional. If omitted, all widgets reset. |
-| `robotcha.getResponse(id)` | Returns the token for a widget. | `id` optional. If omitted or unsolved, returns an empty string. |
+| `onload` | _optional_ | The name of your callback function to be executed once all the dependencies have loaded. |
+| `render` | `explicit` \| `onload` | Whether to render the widget explicitly. Defaults to `onload`, which renders the widget in the first `e-robotcha` tag it finds. |
+| `hl` | _not supported_ | Language override is not supported. |
+
+### g-recaptcha tag attributes and grecaptcha.render parameters
+
+| g-recaptcha tag attribute | grecaptcha.render parameter | Value | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data-sitekey` | `sitekey` | any string | _none_ | Cosmetic only (no server verification). |
+| `data-theme` | `theme` | `dark` \| `light` | `light` | Optional. The color theme of the widget. |
+| `data-size` | `size` | `compact` \| `normal` | `normal` | Optional. The size of the widget. |
+| `data-tabindex` | `tabindex` | _not supported_ | _none_ | Optional. Tabindex override is not supported. |
+| `data-callback` | `callback` | function name | _none_ | Optional. The name of your callback function, executed when automation is detected. The token is passed to your callback. |
+| `data-expired-callback` | `expired-callback` | _not supported_ | _none_ | Optional. Expiration callbacks are not supported. |
+| `data-error-callback` | `error-callback` | function name | _none_ | Optional. The name of your callback function, executed when roboTCHA encounters a runtime error. |
+
+## JavaScript API
+
+| Method | Description |
+| --- | --- |
+| `robotcha.render(container, options)` | Renders the container as a roboTCHA widget and returns the ID of the newly created widget. |
+| `robotcha.reset(opt_widget_id)` | Resets the roboTCHA widget. |
+| `robotcha.getResponse(opt_widget_id)` | Gets the response token for the roboTCHA widget. |
+
+`robotcha.render(container, options)`  
+`container`  
+The HTML element to render the roboTCHA widget. Specify either the ID of the container (string) or the DOM element itself.  
+`options`  
+An object containing parameters as key=value pairs, for example, `{ "theme": "light" }`. See the table above.
+
+`robotcha.reset(opt_widget_id)`  
+`opt_widget_id`  
+Optional widget ID. If omitted, all widgets are reset.
+
+`robotcha.getResponse(opt_widget_id)`  
+`opt_widget_id`  
+Optional widget ID. If omitted or unsolved, returns an empty string.
 
 ## Notes
 
