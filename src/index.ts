@@ -166,42 +166,7 @@ function generateToken(): string {
   return `rbt_${base64}`;
 }
 
-function showStatus(instance: WidgetInstance): void {
-  const { root, status } = instance.elements;
-  if (root.classList.contains('status-visible')) {
-    return;
-  }
-  status.style.display = 'block';
-  root.classList.remove('status-visible');
-  void status.offsetHeight;
-  requestAnimationFrame(() => {
-    root.classList.add('status-visible');
-  });
-}
-
-function hideStatus(instance: WidgetInstance): void {
-  const { root, status } = instance.elements;
-  if (!root.classList.contains('status-visible')) {
-    status.style.display = 'none';
-    return;
-  }
-  root.classList.remove('status-visible');
-
-  const onEnd = (event: TransitionEvent) => {
-    if (event.target !== status) return;
-    status.style.display = 'none';
-    status.removeEventListener('transitionend', onEnd);
-  };
-  status.addEventListener('transitionend', onEnd);
-  window.setTimeout(() => {
-    if (!root.classList.contains('status-visible')) {
-      status.style.display = 'none';
-    }
-  }, 220);
-}
-
 function setState(instance: WidgetInstance, state: WidgetState): void {
-  const prevState = instance.state;
   instance.state = state;
   const { root, input, status } = instance.elements;
 
@@ -215,14 +180,6 @@ function setState(instance: WidgetInstance, state: WidgetState): void {
     input.setAttribute('aria-disabled', 'true');
   } else {
     input.removeAttribute('aria-disabled');
-  }
-
-  const wasVisible = prevState !== 'unchecked';
-  const shouldBeVisible = state !== 'unchecked';
-  if (!wasVisible && shouldBeVisible) {
-    showStatus(instance);
-  } else if (wasVisible && !shouldBeVisible) {
-    hideStatus(instance);
   }
 }
 
@@ -386,28 +343,19 @@ function buildStyles(): HTMLStyleElement {
     .rc-status {
       font-size: 11px;
       letter-spacing: 0.6px;
-      margin-top: 0;
+      margin-top: 2px;
       white-space: nowrap;
-      max-height: 0;
-      opacity: 0;
-      overflow: hidden;
-      transform: translateY(-4px);
-      transition: max-height 200ms ease, opacity 200ms ease, transform 200ms ease;
+      min-height: 14px;
     }
 
     .rc-root.size-compact .rc-status {
       font-size: 9px;
       letter-spacing: 0.4px;
+      min-height: 12px;
     }
 
-    .rc-root.status-visible .rc-status {
-      max-height: 20px;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .rc-root.size-compact.status-visible .rc-status {
-      max-height: 16px;
+    .rc-root.state-unchecked .rc-status {
+      display: none;
     }
 
     .rc-root.state-checking .rc-status {
@@ -669,7 +617,6 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
 
   const status = document.createElement('div');
   status.className = 'rc-status';
-  status.style.display = 'none';
 
   text.append(labelText, status);
   control.append(input, box);
