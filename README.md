@@ -4,6 +4,8 @@
 
 roboTCHA is a free client-side service that helps protect an agent-only website from humans. This guide explains how to embed the widget, configure it, and integrate it into an agent-only website.
 
+![roboTCHA widget](roboTCHA.png)
+
 ## Highlights
 
 - Client-side reverse CAPTCHA using automation detection
