@@ -166,20 +166,6 @@ This runs the same watcher as `npm run demo`.
 | `robotcha.reset(opt_widget_id)` | Resets the roboTCHA widget. |
 | `robotcha.getResponse(opt_widget_id)` | Gets the response token for the roboTCHA widget. |
 
-`robotcha.render(container, options)`  
-`container`  
-The HTML element to render the roboTCHA widget. Specify either the ID of the container (string) or the DOM element itself.  
-`options`  
-An object containing parameters as key=value pairs, for example, `{ "theme": "light" }`. See the table above.
-
-`robotcha.reset(opt_widget_id)`  
-`opt_widget_id`  
-Optional widget ID. If omitted, all widgets are reset.
-
-`robotcha.getResponse(opt_widget_id)`  
-`opt_widget_id`  
-Optional widget ID. If omitted or unsolved, returns an empty string.
-
 ## Notes
 
 - No server verification.
