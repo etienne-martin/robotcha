@@ -752,7 +752,7 @@ function autoRender(): void {
     return;
   }
 
-  const nodes = Array.from(document.querySelectorAll<HTMLElement>('.g-robotcha'));
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>('.e-robotcha'));
   nodes.forEach((node) => {
     if (node.dataset.robotchaRendered === 'true') {
       return;

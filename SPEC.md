@@ -144,7 +144,7 @@ No expiration system.
 If script is loaded and DOM contains:
 
 ```html
-<div class="g-robotcha"
+<div class="e-robotcha"
      data-sitekey="robot-public"
      data-theme="light"
      data-callback="onRobotcha"

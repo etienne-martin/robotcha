@@ -23,7 +23,7 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 
 ```html
 <div
-  class="g-robotcha"
+  class="e-robotcha"
   data-theme="light"
   data-size="normal"
   data-callback="onRobotcha"
@@ -100,7 +100,7 @@ const id = robotcha.render('#robotcha', {
 
 ```html
 <div
-  class="g-robotcha"
+  class="e-robotcha"
   data-sitekey="robot-public"
   data-theme="light"
   data-size="normal"

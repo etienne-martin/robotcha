@@ -97,7 +97,7 @@
       <div class="card">
         <h2>Auto Render</h2>
         <div
-          class="g-robotcha"
+          class="e-robotcha"
           data-theme="dark"
           data-size="compact"
           data-callback="onRobotcha"
@@ -141,7 +141,7 @@
       });
 
       document.getElementById('reset-auto').addEventListener('click', () => {
-        const autoNode = document.querySelector('.g-robotcha');
+        const autoNode = document.querySelector('.e-robotcha');
         const idAttr = autoNode?.dataset?.robotchaId;
         const autoId = idAttr ? Number(idAttr) : -1;
         const response = autoId >= 0 ? robotcha.getResponse(autoId) : '';
