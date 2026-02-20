@@ -663,6 +663,13 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     void handleClick(instance);
   };
 
+  const resetIfUnsolved = () => {
+    if (instance.state === 'unsolved') {
+      instance.token = '';
+      setState(instance, 'unchecked');
+    }
+  };
+
   elements.label.addEventListener('click', onActivate);
   elements.input.addEventListener('click', (event) => {
     event.preventDefault();
@@ -675,12 +682,25 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
       void handleClick(instance);
     }
   });
-  elements.input.addEventListener('blur', () => {
-    if (instance.state === 'unsolved') {
-      instance.token = '';
-      setState(instance, 'unchecked');
-    }
-  });
+  elements.input.addEventListener('blur', resetIfUnsolved);
+
+  if (typeof document !== 'undefined') {
+    const onOutsidePointer = (event: PointerEvent) => {
+      if (!instance.host.isConnected) {
+        document.removeEventListener('pointerdown', onOutsidePointer, true);
+        return;
+      }
+      if (instance.state !== 'unsolved') {
+        return;
+      }
+      const target = event.target as Node | null;
+      if (target && instance.host.contains(target)) {
+        return;
+      }
+      resetIfUnsolved();
+    };
+    document.addEventListener('pointerdown', onOutsidePointer, true);
+  }
 
   return instance;
 }
