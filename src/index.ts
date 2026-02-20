@@ -152,18 +152,21 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
       border: 1px solid #d3d3d3;
       border-radius: 4px;
       padding: 10px 12px;
       background: #f9f9f9;
       user-select: none;
-      min-width: 220px;
+      min-width: 280px;
     }
 
     .rc-root.size-compact {
       padding: 6px 8px;
-      min-width: 180px;
+      min-width: 220px;
     }
 
     .rc-label {
@@ -171,6 +174,7 @@ function buildStyles(): HTMLStyleElement {
       align-items: center;
       gap: 10px;
       cursor: pointer;
+      flex: 1;
     }
 
     .rc-root.size-compact .rc-label {
@@ -254,6 +258,44 @@ function buildStyles(): HTMLStyleElement {
       color: #c62828;
     }
 
+    .rc-brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #6b7280;
+      line-height: 1.1;
+    }
+
+    .rc-brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: conic-gradient(#4f7df3 0 120deg, #b0b0b0 120deg 240deg, #2f4fbf 240deg 360deg);
+      position: relative;
+    }
+
+    .rc-brand-icon::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: #f9f9f9;
+    }
+
+    .rc-brand-text {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: #6b7280;
+    }
+
+    .rc-brand-links {
+      font-size: 10px;
+      color: #9aa0a6;
+    }
+
     .rc-check {
       width: 12px;
       height: 6px;
@@ -301,6 +343,10 @@ function buildStyles(): HTMLStyleElement {
       background: #2a2a2a;
       border-color: #444;
       color: #eee;
+    }
+
+    .rc-root.theme-dark .rc-brand-icon::after {
+      background: #2a2a2a;
     }
 
     .rc-root.theme-dark .rc-input {
@@ -370,6 +416,23 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   control.append(input, box);
   label.append(control, text);
   root.append(label);
+
+  const brand = document.createElement('div');
+  brand.className = 'rc-brand';
+
+  const brandIcon = document.createElement('span');
+  brandIcon.className = 'rc-brand-icon';
+
+  const brandText = document.createElement('div');
+  brandText.className = 'rc-brand-text';
+  brandText.textContent = 'roboTCHA';
+
+  const brandLinks = document.createElement('div');
+  brandLinks.className = 'rc-brand-links';
+  brandLinks.textContent = 'Privacy - Terms';
+
+  brand.append(brandIcon, brandText, brandLinks);
+  root.append(brand);
 
   const theme = options.theme === 'dark' ? 'dark' : 'light';
   const size = options.size === 'compact' ? 'compact' : 'normal';
