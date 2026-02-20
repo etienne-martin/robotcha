@@ -18,7 +18,7 @@ module.exports = [
   {
     input: 'src/index.ts',
     output: [
-      { file: 'dist/robotcha.umd.js', format: 'umd', exports: 'named', ...baseOutput },
+      { file: 'dist/robotcha.js', format: 'umd', exports: 'named', ...baseOutput },
       { file: 'dist/robotcha.esm.js', format: 'es', sourcemap: true },
       { file: 'dist/robotcha.cjs.js', format: 'cjs', exports: 'named', sourcemap: true }
     ],
@@ -26,7 +26,7 @@ module.exports = [
   },
   {
     input: 'src/index.ts',
-    output: { file: 'dist/robotcha.umd.min.js', format: 'umd', exports: 'named', ...baseOutput },
+    output: { file: 'dist/robotcha.min.js', format: 'umd', exports: 'named', ...baseOutput },
     plugins: [...basePlugins, terser()]
   }
 ];

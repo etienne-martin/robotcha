@@ -30,7 +30,7 @@ It uses an automation detection engine.
 ## 2. Detection Engine
 
 - Engine: automation detection
-- Bundled directly inside the UMD build
+- Bundled directly inside the browser build
 - No runtime dynamic loading
 - No external server verification
 
@@ -54,7 +54,7 @@ Published to npm as:
 CDN usage via unpkg:
 
 ```html
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
+<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js" async defer></script>
 ```
 
 Bundle contains:

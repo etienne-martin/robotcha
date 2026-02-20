@@ -18,12 +18,12 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 **Quick start**
 
 1. Add a container where the checkbox should appear.
-2. Load the UMD bundle from unpkg (no installation needed).
+2. Load the bundle from unpkg (no installation needed).
 3. Call `robotcha.render(...)` and handle the token callback.
 
 ```html
 <div id="robotcha"></div>
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
+<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js" async defer></script>
 <script>
   const id = robotcha.render(document.getElementById('robotcha'), {
     theme: 'light',

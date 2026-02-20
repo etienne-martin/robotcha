@@ -6,14 +6,14 @@
   "main": "dist/robotcha.cjs.js",
   "module": "dist/robotcha.esm.js",
   "types": "dist/index.d.ts",
-  "unpkg": "dist/robotcha.umd.js",
-  "browser": "dist/robotcha.umd.js",
+  "unpkg": "dist/robotcha.min.js",
+  "browser": "dist/robotcha.min.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/robotcha.esm.js",
       "require": "./dist/robotcha.cjs.js",
-      "default": "./dist/robotcha.umd.js"
+      "default": "./dist/robotcha.min.js"
     }
   },
   "files": [
