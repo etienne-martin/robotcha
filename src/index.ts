@@ -376,28 +376,27 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.size-compact .rc-brand {
-      padding: 4px 6px;
-      gap: 1px;
-      font-size: 8px;
+      padding: 6px 8px;
+      gap: 2px;
+      font-size: 9px;
     }
 
     .rc-root.size-compact .rc-brand-icon {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
     }
 
     .rc-root.size-compact .rc-brand-icon::after {
-      inset: 5px;
+      inset: 6px;
     }
 
     .rc-root.size-compact .rc-brand-text {
-      font-size: 9px;
-      letter-spacing: 0.2px;
+      font-size: 10px;
+      letter-spacing: 0.3px;
     }
 
     .rc-root.size-compact .rc-brand-links {
-      font-size: 8px;
-      line-height: 1.05;
+      font-size: 9px;
     }
     .rc-brand-icon {
       width: 28px;
