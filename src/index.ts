@@ -239,6 +239,7 @@ function buildStyles(): HTMLStyleElement {
       --rc-control-size: 28px;
       --rc-gap: 10px;
       --rc-check-stroke: 4px;
+      --rc-check-length: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -432,8 +433,8 @@ function buildStyles(): HTMLStyleElement {
       stroke-width: var(--rc-check-stroke);
       stroke-linecap: round;
       stroke-linejoin: round;
-      stroke-dasharray: var(--rc-check-length, 24);
-      stroke-dashoffset: var(--rc-check-length, 24);
+      stroke-dasharray: var(--rc-check-length);
+      stroke-dashoffset: var(--rc-check-length);
     }
 
     .rc-input:checked {
@@ -489,9 +490,7 @@ function buildStyles(): HTMLStyleElement {
 
     .rc-root.state-solved .rc-check-path {
       stroke: #00a357;
-      stroke-dasharray: var(--rc-check-length, 24);
-      stroke-dashoffset: var(--rc-check-length, 24);
-      animation: rc-draw-check 0.28s ease-out forwards;
+      animation: rc-draw-check 0.22s ease-out forwards;
     }
 
     .rc-root.theme-dark {
@@ -551,7 +550,7 @@ function buildStyles(): HTMLStyleElement {
     }
 
     @keyframes rc-draw-check {
-      from { stroke-dashoffset: var(--rc-check-length, 24); }
+      from { stroke-dashoffset: var(--rc-check-length); }
       to { stroke-dashoffset: 0; }
     }
 
@@ -585,14 +584,7 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   const checkPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   checkPath.setAttribute('class', 'rc-check-path');
   checkPath.setAttribute('d', 'M5 13l4 4L19 7');
-  try {
-    const length = checkPath.getTotalLength();
-    checkPath.style.setProperty('--rc-check-length', String(length));
-    checkPath.style.strokeDasharray = String(length);
-    checkPath.style.strokeDashoffset = String(length);
-  } catch {
-    // Fallback to CSS defaults when total length is unavailable.
-  }
+  checkPath.setAttribute('pathLength', '100');
   checkSvg.append(checkPath);
   check.append(checkSvg);
 
