@@ -13,21 +13,13 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
 - No server, no keys, no expiration
 - Agent-first: intended for autonomous agents and automation-centric experiences
 
-## Install
-
-```bash
-npm install robotcha
-```
-
-Or via unpkg:
-
-```html
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.umd.js" async defer></script>
-```
-
 ## Usage
 
-**Script tag (global)**
+**Quick start (no install)**
+
+1. Add a container where the checkbox should appear.
+2. Load the UMD bundle from unpkg.
+3. Call `robotcha.render(...)` and handle the token callback.
 
 ```html
 <div id="robotcha"></div>
@@ -45,6 +37,34 @@ Or via unpkg:
   });
 </script>
 ```
+
+**Recommended pattern (agent-first)**
+
+roboTCHA is most useful when you intentionally allow automated agents and want to block human interaction. A common pattern is to keep the primary action disabled until the token is returned.
+
+If you want to gate a form submit or agent-only action, enable the button only after the callback fires:
+
+```html
+<button id="submit" disabled>Continue</button>
+<script>
+  const submit = document.getElementById('submit');
+  robotcha.render('#robotcha', {
+    callback: () => {
+      submit.disabled = false;
+    }
+  });
+</script>
+```
+
+**Bundlers (optional)**
+
+If you prefer bundling, install via npm:
+
+```bash
+npm install robotcha
+```
+
+Then use ESM or CommonJS:
 
 **ESM**
 

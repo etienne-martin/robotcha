@@ -42,8 +42,8 @@ const instances = new Map<number, WidgetInstance>();
 let botdPromise: Promise<Botd> | null = null;
 
 const REPO_HOME = 'https://github.com/etienne-martin/robotcha';
-const PRIVACY_URL = `${REPO_HOME}/blob/develop/PRIVACY.md`;
-const LICENSE_URL = `${REPO_HOME}/blob/develop/LICENSE`;
+const PRIVACY_URL = `${REPO_HOME}/blob/HEAD/PRIVACY.md`;
+const LICENSE_URL = `${REPO_HOME}/blob/HEAD/LICENSE`;
 
 const LABEL_TEXT = 'I am a robot';
 const STATUS_TEXT: Record<WidgetState, string> = {
