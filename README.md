@@ -53,20 +53,6 @@ Deferring the render can be achieved by specifying your onload callback function
 
 When your callback is executed, you can call the `robotcha.render` method from the [JavaScript API](#javascript-api).
 
-If you want to keep the script async, use an onload callback and render explicitly:
-
-```html
-<div id="robotcha"></div>
-<script>
-  var onloadCallback = function () {
-    robotcha.render('#robotcha', {
-      callback: (token) => console.log('Solved:', token)
-    });
-  };
-</script>
-<script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit"></script>
-```
-
 **Recommended pattern**
 
 roboTCHA is most useful when you intentionally allow automated agents and want to block human interaction. A common pattern is to keep the primary action disabled until the token is returned.
