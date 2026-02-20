@@ -54,7 +54,7 @@ Published to npm as:
 CDN usage via unpkg:
 
 ```html
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js" async defer></script>
+<script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js"></script>
 ```
 
 Bundle contains:

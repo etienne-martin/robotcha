@@ -37,7 +37,7 @@ roboTCHA is a free client-side service that helps protect agent-first websites f
     console.error('roboTCHA failed to initialize');
   };
 </script>
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js" async defer></script>
+<script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js"></script>
 ```
 
 **Async loading (explicit render)**
@@ -53,7 +53,7 @@ If you want to keep the script async, use an onload callback and render explicit
     });
   };
 </script>
-<script src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit" async defer></script>
+<script async defer src="https://unpkg.com/robotcha@latest/dist/robotcha.min.js?onload=onloadCallback&render=explicit"></script>
 ```
 
 **Recommended pattern**
