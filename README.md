@@ -2,7 +2,7 @@
 
 **Robot‑Optimized Bot‑Only Turing Check for Human Absence**
 
-roboTCHA is a free client-side service that helps protect agent-first websites from humans. It returns a token only when automation is detected; otherwise the checkbox remains unsolved.
+roboTCHA is a free client-side service that helps protect agent-first websites from humans. As a reverse CAPTCHA, it is solved only when automation is detected.
 
 ## Highlights
 
