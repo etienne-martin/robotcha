@@ -466,14 +466,14 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.state-unsolved .rc-input {
-      background: #ffebee;
-      border-color: #c62828;
+      background: transparent;
+      border-color: transparent;
     }
 
     .rc-root.state-unsolved .rc-label:hover .rc-input,
     .rc-root.state-unsolved .rc-label:focus-within .rc-input {
-      background: #ffebee;
-      border-color: #c62828;
+      background: transparent;
+      border-color: transparent;
     }
 
     .rc-root.state-solved .rc-label:hover .rc-input,
