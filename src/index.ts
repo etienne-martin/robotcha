@@ -223,15 +223,18 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 2px;
+      position: relative;
+      height: 28px;
+    }
+
+    .rc-root.size-compact .rc-text {
+      height: 22px;
     }
 
     .rc-label-text {
       font-size: 14px;
       letter-spacing: 0.4px;
+      line-height: 1;
     }
 
     .rc-root.size-compact .rc-label-text {
@@ -239,6 +242,10 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-status {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 2px;
       font-size: 11px;
       letter-spacing: 0.6px;
       text-transform: uppercase;
