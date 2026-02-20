@@ -323,14 +323,15 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-spinner {
-      width: 16px;
-      height: 16px;
+      width: 100%;
+      height: 100%;
       border: 2px solid rgba(0, 0, 0, 0.2);
       border-top-color: rgba(0, 0, 0, 0.6);
       border-radius: 50%;
       animation: rc-spin 0.8s linear infinite;
       opacity: 0;
       grid-area: 1 / 1;
+      box-sizing: border-box;
     }
 
     .rc-root.state-checking .rc-spinner {
