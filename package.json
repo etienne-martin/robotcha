@@ -18,8 +18,7 @@
   },
   "files": [
     "dist",
-    "README.md",
-    "demo"
+    "README.md"
   ],
   "scripts": {
     "build": "npm run build:js && npm run build:types",
