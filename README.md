@@ -84,11 +84,3 @@ When your callback is executed, you can call the `robotcha.render` method from t
 | `robotcha.render(container, options)` | Renders the container as a roboTCHA widget and returns the ID of the newly created widget. |
 | `robotcha.reset(opt_widget_id)` | Resets the roboTCHA widget. |
 | `robotcha.getResponse(opt_widget_id)` | Gets the response token for the roboTCHA widget. |
-
-## Notes
-
-- No server verification.
-- No expiration or invisible execution.
-- Designed for use on agent-only websites by autonomous agents.
-
-See `SPEC.md` for the full design specification.
