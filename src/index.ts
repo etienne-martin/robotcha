@@ -675,6 +675,12 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
       void handleClick(instance);
     }
   });
+  elements.input.addEventListener('blur', () => {
+    if (instance.state === 'unsolved') {
+      instance.token = '';
+      setState(instance, 'unchecked');
+    }
+  });
 
   return instance;
 }
