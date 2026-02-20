@@ -348,6 +348,12 @@ function buildStyles(): HTMLStyleElement {
       min-height: 14px;
     }
 
+    .rc-root.size-compact .rc-status {
+      font-size: 9px;
+      letter-spacing: 0.4px;
+      min-height: 12px;
+    }
+
     .rc-root.state-unchecked .rc-status {
       display: none;
     }
