@@ -152,6 +152,8 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root {
+      --rc-control-size: 28px;
+      --rc-gap: 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -166,6 +168,8 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-root.size-compact {
+      --rc-control-size: 22px;
+      --rc-gap: 8px;
       padding: 6px 8px;
       width: 220px;
       height: 60px;
@@ -174,26 +178,17 @@ function buildStyles(): HTMLStyleElement {
     .rc-label {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: var(--rc-gap);
       cursor: pointer;
       flex: 1;
     }
 
-    .rc-root.size-compact .rc-label {
-      gap: 8px;
-    }
-
     .rc-control {
       position: relative;
-      width: 28px;
-      height: 28px;
+      width: var(--rc-control-size);
+      height: var(--rc-control-size);
       display: inline-block;
       flex-shrink: 0;
-    }
-
-    .rc-root.size-compact .rc-control {
-      width: 22px;
-      height: 22px;
     }
 
     .rc-input {
@@ -223,17 +218,9 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-text {
-      display: grid;
-      grid-template-rows: 28px auto;
-    }
-
-    .rc-root.size-compact .rc-text {
-      grid-template-rows: 22px auto;
-    }
-
-    .rc-label-row {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .rc-label-text {
@@ -426,14 +413,10 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   labelText.className = 'rc-label-text';
   labelText.textContent = LABEL_TEXT;
 
-  const labelRow = document.createElement('div');
-  labelRow.className = 'rc-label-row';
-  labelRow.append(labelText);
-
   const status = document.createElement('div');
   status.className = 'rc-status';
 
-  text.append(labelRow, status);
+  text.append(labelText, status);
   control.append(input, box);
   label.append(control, text);
   root.append(label);
