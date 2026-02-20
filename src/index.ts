@@ -225,6 +225,7 @@ function buildStyles(): HTMLStyleElement {
 
     .rc-label-text {
       font-size: 14px;
+      font-weight: 600;
       letter-spacing: 0.4px;
       line-height: 1;
     }
