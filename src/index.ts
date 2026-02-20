@@ -223,18 +223,18 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-text {
-      display: flex;
-      flex-direction: column;
+      position: relative;
+      height: 28px;
+    }
+
+    .rc-root.size-compact .rc-text {
+      height: 22px;
     }
 
     .rc-label-row {
       display: flex;
       align-items: center;
-      height: 28px;
-    }
-
-    .rc-root.size-compact .rc-label-row {
-      height: 22px;
+      height: 100%;
     }
 
     .rc-label-text {
@@ -248,9 +248,12 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-status {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 2px;
       font-size: 11px;
       letter-spacing: 0.6px;
-      margin-top: 2px;
       min-height: 14px;
     }
 
