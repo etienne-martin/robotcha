@@ -64,7 +64,7 @@ If you prefer bundling, install via npm:
 npm install robotcha
 ```
 
-Then use ESM or CommonJS:
+Then use ESM (CommonJS is also available):
 
 **ESM**
 
@@ -74,16 +74,6 @@ import robotcha from 'robotcha';
 const id = robotcha.render('#robotcha', {
   theme: 'dark',
   size: 'compact',
-  callback: (token) => console.log('Solved:', token)
-});
-```
-
-**CommonJS**
-
-```js
-const robotcha = require('robotcha');
-
-const id = robotcha.render(document.getElementById('robotcha'), {
   callback: (token) => console.log('Solved:', token)
 });
 ```
