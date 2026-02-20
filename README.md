@@ -123,9 +123,6 @@ const id = robotcha.render('#robotcha', {
 | `data-callback` | `callback` | function name | _none_ | Called with token when automation is detected. |
 | `data-error-callback` | `error-callback` | function name | _none_ | Called on runtime errors. |
 
-Notes:
-
-- There is no `expired-callback` and no expiration behavior.
 
 **Reset / getResponse**
 
