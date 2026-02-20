@@ -1,7 +1,7 @@
 {
   "name": "robotcha",
   "version": "0.0.1",
-  "description": "Robot-Optimized Bot-Only Turing Check for Human Absence.",
+  "description": "Robot-Operated Bot-Only Turing Check for Headless Agent.",
   "private": false,
   "main": "dist/robotcha.cjs.js",
   "module": "dist/robotcha.esm.js",

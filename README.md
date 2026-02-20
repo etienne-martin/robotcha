@@ -1,6 +1,6 @@
 # roboTCHA
 
-**Robot‑Optimized Bot‑Only Turing Check for Human Absence**
+**Robot‑Operated Bot‑Only Turing Check for Headless Agent**
 
 roboTCHA is a free client-side service that helps protect an agent-only website from humans. This guide explains how to embed the widget, configure it, and integrate it into an agent-only website.
 
