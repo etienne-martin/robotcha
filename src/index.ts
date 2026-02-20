@@ -41,12 +41,12 @@ let nextId = 0;
 const instances = new Map<number, WidgetInstance>();
 let botdPromise: Promise<Botd> | null = null;
 
-const LABEL_TEXT = 'I AM A ROBOT';
+const LABEL_TEXT = "I'm a robot";
 const STATUS_TEXT: Record<WidgetState, string> = {
   unchecked: '',
-  checking: 'CHECKING...',
-  solved: 'VERIFIED ROBOT',
-  unsolved: 'HUMAN DETECTED'
+  checking: 'Checking...',
+  solved: 'Verified robot',
+  unsolved: 'Human detected'
 };
 
 function resolveContainer(container: Element | string): Element | null {
