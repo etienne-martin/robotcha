@@ -223,11 +223,17 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-text {
-      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rc-label-row {
+      display: flex;
+      align-items: center;
       height: 28px;
     }
 
-    .rc-root.size-compact .rc-text {
+    .rc-root.size-compact .rc-label-row {
       height: 22px;
     }
 
@@ -242,13 +248,9 @@ function buildStyles(): HTMLStyleElement {
     }
 
     .rc-status {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin-top: 2px;
       font-size: 11px;
       letter-spacing: 0.6px;
-      text-transform: uppercase;
+      margin-top: 2px;
       min-height: 14px;
     }
 
@@ -424,10 +426,14 @@ function buildWidget(options: RobotchaRenderOptions): WidgetElements {
   labelText.className = 'rc-label-text';
   labelText.textContent = LABEL_TEXT;
 
+  const labelRow = document.createElement('div');
+  labelRow.className = 'rc-label-row';
+  labelRow.append(labelText);
+
   const status = document.createElement('div');
   status.className = 'rc-status';
 
-  text.append(labelText, status);
+  text.append(labelRow, status);
   control.append(input, box);
   label.append(control, text);
   root.append(label);
