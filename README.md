@@ -113,6 +113,20 @@ const id = robotcha.render('#robotcha', {
 </script>
 ```
 
+**Auto-render attributes and render options**
+
+| Auto-render attribute | `robotcha.render` option | Values | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data-sitekey` | _none_ | any string | _none_ | Cosmetic only (no server verification). |
+| `data-theme` | `theme` | `light` \| `dark` | `light` | Widget theme. |
+| `data-size` | `size` | `normal` \| `compact` | `normal` | Widget size. |
+| `data-callback` | `callback` | function name | _none_ | Called with token when automation is detected. |
+| `data-error-callback` | `error-callback` | function name | _none_ | Called on runtime errors. |
+
+Notes:
+
+- There is no `expired-callback` and no expiration behavior.
+
 **Reset / getResponse**
 
 ```js
