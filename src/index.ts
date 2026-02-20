@@ -219,6 +219,7 @@ async function handleClick(instance: WidgetInstance): Promise<void> {
     instance.options['error-callback']?.();
   }
 
+  focusInput(instance);
 }
 
 function buildStyles(): HTMLStyleElement {
@@ -669,18 +670,44 @@ function createInstance(container: Element, options: RobotchaRenderOptions): Wid
     event.stopPropagation();
     void handleClick(instance);
   });
-  elements.input.addEventListener('blur', () => {
-    if (instance.state === 'unsolved') {
-      instance.token = '';
-      setState(instance, 'unchecked');
-    }
-  });
   elements.input.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       void handleClick(instance);
     }
   });
+
+  const hasFocusWithin = () => {
+    if ('activeElement' in instance.shadow) {
+      return instance.shadow.activeElement !== null;
+    }
+    if (typeof instance.host.matches === 'function') {
+      return instance.host.matches(':focus-within');
+    }
+    return false;
+  };
+
+  const schedule = typeof queueMicrotask === 'function'
+    ? queueMicrotask
+    : (fn: () => void) => setTimeout(fn, 0);
+
+  const onFocusOut = () => {
+    if (instance.state !== 'unsolved') {
+      return;
+    }
+    schedule(() => {
+      if (!instance.host.isConnected) {
+        return;
+      }
+      if (!hasFocusWithin()) {
+        instance.token = '';
+        setState(instance, 'unchecked');
+      }
+    });
+  };
+
+  elements.root.addEventListener('focusout', onFocusOut);
+  instance.shadow.addEventListener('focusout', onFocusOut as EventListener);
 
   return instance;
 }
