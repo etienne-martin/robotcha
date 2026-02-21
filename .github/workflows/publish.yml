@@ -1,9 +1,10 @@
 name: publish
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    secrets:
+      NPM_AUTH_TOKEN:
+        required: false
 
 permissions:
   contents: read
@@ -22,45 +23,13 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
 
-      - name: Compare versions
-        id: version
-        run: |
-          set -e
-          after="$(node -p "require('./package.json').version")"
-          before_sha="${{ github.event.before }}"
-          if [ "$before_sha" = "0000000000000000000000000000000000000000" ]; then
-            before=""
-          else
-            if git show "$before_sha:package.json" > /tmp/pkg.json 2>/dev/null; then
-              before="$(node -e "const fs=require('fs');console.log(JSON.parse(fs.readFileSync('/tmp/pkg.json','utf8')).version)")"
-            else
-              before=""
-            fi
-          fi
-
-          echo "after=$after" >> "$GITHUB_OUTPUT"
-          echo "before=$before" >> "$GITHUB_OUTPUT"
-
-          if [ -n "$before" ] && [ "$before" = "$after" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Install dependencies
-        if: steps.version.outputs.skip != 'true'
-        run: npm ci
-
-      - name: Build
-        if: steps.version.outputs.skip != 'true'
-        run: npm run build
-
-      - name: Test
-        if: steps.version.outputs.skip != 'true'
-        run: npm test
+      - name: Download dist artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
       - name: Publish
-        if: steps.version.outputs.skip != 'true'
-        run: npm publish --access public
+        run: bash scripts/publish.sh
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

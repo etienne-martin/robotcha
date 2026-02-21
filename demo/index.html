@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>roboTCHA Demo</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px;
+        background: #f4f5f7;
+        color: #1f1f1f;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: 24px;
+      }
+      p {
+        margin: 0 0 24px;
+        color: #4b5563;
+      }
+      .debug {
+        margin: 0 0 20px;
+        font-size: 13px;
+        color: #374151;
+      }
+      .debug a {
+        color: #1d4ed8;
+        text-decoration: none;
+        margin-right: 12px;
+      }
+      .debug a:hover {
+        text-decoration: underline;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+        gap: 24px;
+      }
+      .card {
+        box-sizing: border-box;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .tab-demo {
+        display: grid;
+        gap: 10px;
+        margin-top: 8px;
+      }
+      .tab-demo label {
+        display: grid;
+        gap: 6px;
+        font-size: 12px;
+        color: #374151;
+      }
+      .tab-demo input {
+        padding: 6px 8px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        font-size: 12px;
+        background: #ffffff;
+        color: #111827;
+      }
+      .hint {
+        margin: 8px 0 0;
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .log {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 12px;
+        border-radius: 6px;
+        min-height: 80px;
+        white-space: pre-wrap;
+      }
+      button.action {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #cbd5f5;
+        background: #eef2ff;
+        color: #1e1b4b;
+        cursor: default;
+      }
+
+      button.action:hover {
+        background: #e0e7ff;
+      }
+
+      button.action:active {
+        background: #c7d2fe;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>roboTCHA Local Demo</h1>
+    <p>Open the console to see callbacks fire. Use the buttons to reset.</p>
+    <div class="debug">
+      Debug override:
+      <a href="?robotcha_debug=bot">Force robot</a>
+      <a href="?robotcha_debug=human">Force human</a>
+      <a href="?robotcha_debug=error">Force error</a>
+      <a href="./index.html">Clear</a>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Manual render (light)</h2>
+        <div id="manual-light"></div>
+        <div class="actions">
+          <button class="action" data-reset="manual-light">Reset</button>
+          <button class="action" data-response="manual-light">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Manual render (dark, compact)</h2>
+        <div id="manual-dark"></div>
+        <div class="actions">
+          <button class="action" data-reset="manual-dark">Reset</button>
+          <button class="action" data-response="manual-dark">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Manual render (dark, normal)</h2>
+        <div id="manual-dark-normal"></div>
+        <div class="actions">
+          <button class="action" data-reset="manual-dark-normal">Reset</button>
+          <button class="action" data-response="manual-dark-normal">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Auto render (data attributes)</h2>
+        <div
+          class="e-robotcha"
+          data-demo="auto-dark"
+          data-theme="dark"
+          data-size="compact"
+          data-callback="onRobotchaAutoDark"
+          data-error-callback="onRobotchaError"
+        ></div>
+        <div class="actions">
+          <button class="action" data-reset-auto="auto-dark">Reset</button>
+          <button class="action" data-response-auto="auto-dark">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Tabindex demo</h2>
+        <p class="hint">Tabbing skips roboTCHA because tabindex is -1.</p>
+        <div class="tab-demo">
+          <label>
+            Before
+            <input type="text" />
+          </label>
+          <div
+            class="e-robotcha"
+            data-demo="auto-tab"
+            data-tabindex="-1"
+            data-callback="onRobotchaTab"
+            data-error-callback="onRobotchaError"
+          ></div>
+          <label>
+            After
+            <input type="text" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="action" data-reset-auto="auto-tab">Reset</button>
+          <button class="action" data-response-auto="auto-tab">Get response</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Events</h2>
+        <div class="log" id="log"></div>
+      </div>
+    </div>
+
+    <script src="/dist/robotcha.min.js"></script>
+    <script>
+      const log = document.getElementById('log');
+      const logLine = (message) => {
+        const timestamp = new Date().toLocaleTimeString();
+        log.textContent = `[${timestamp}] ${message}\n` + log.textContent;
+      };
+
+      window.onRobotcha = (token) => {
+        logLine(`auto callback: ${token}`);
+      };
+
+      window.onRobotchaAutoDark = (token) => {
+        logLine(`auto dark callback: ${token}`);
+      };
+
+      window.onRobotchaTab = (token) => {
+        logLine(`tabindex callback: ${token}`);
+      };
+
+      window.onRobotchaError = () => {
+        logLine('auto error-callback fired');
+      };
+
+      const manualLightId = robotcha.render(document.getElementById('manual-light'), {
+        theme: 'light',
+        size: 'normal',
+        callback: (token) => logLine(`manual light callback: ${token}`),
+        'error-callback': () => logLine('manual light error-callback fired')
+      });
+
+      const manualDarkId = robotcha.render(document.getElementById('manual-dark'), {
+        theme: 'dark',
+        size: 'compact',
+        tabindex: 2,
+        callback: (token) => logLine(`manual dark callback: ${token}`),
+        'error-callback': () => logLine('manual dark error-callback fired')
+      });
+
+      const manualDarkNormalId = robotcha.render(
+        document.getElementById('manual-dark-normal'),
+        {
+          theme: 'dark',
+          size: 'normal',
+          callback: (token) => logLine(`manual dark normal callback: ${token}`),
+          'error-callback': () => logLine('manual dark normal error-callback fired')
+        }
+      );
+
+      const manualMap = new Map([
+        ['manual-light', manualLightId],
+        ['manual-dark', manualDarkId],
+        ['manual-dark-normal', manualDarkNormalId]
+      ]);
+
+      document.querySelectorAll('[data-reset]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-reset');
+          if (!key) return;
+          const id = manualMap.get(key);
+          if (typeof id === 'number') {
+            robotcha.reset(id);
+            logLine(`${key} reset`);
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-response]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-response');
+          if (!key) return;
+          const id = manualMap.get(key);
+          const response = typeof id === 'number' ? robotcha.getResponse(id) : '';
+          logLine(`${key} response: ${response || 'empty'}`);
+        });
+      });
+
+      const getAutoId = (key) => {
+        const node = document.querySelector(`[data-demo="${key}"]`);
+        const idAttr = node?.dataset?.robotchaId;
+        return idAttr ? Number(idAttr) : -1;
+      };
+
+      document.querySelectorAll('[data-reset-auto]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-reset-auto');
+          if (!key) return;
+          const autoId = getAutoId(key);
+          if (autoId >= 0) {
+            robotcha.reset(autoId);
+            logLine(`${key} reset`);
+          } else {
+            logLine(`${key} reset failed (no id)`);
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-response-auto]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-response-auto');
+          if (!key) return;
+          const autoId = getAutoId(key);
+          const response = autoId >= 0 ? robotcha.getResponse(autoId) : '';
+          logLine(`${key} response: ${response || 'empty'}`);
+        });
+      });
+    </script>
+  </body>
+</html>

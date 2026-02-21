@@ -1,0 +1,54 @@
+{
+  "name": "robotcha",
+  "version": "1.0.0",
+  "description": "Robot-Operated Bot-Only Turing Check for Headless Agent.",
+  "private": false,
+  "main": "dist/robotcha.cjs.js",
+  "module": "dist/robotcha.esm.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/robotcha.min.js",
+  "browser": "dist/robotcha.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/robotcha.esm.js",
+      "require": "./dist/robotcha.cjs.js",
+      "default": "./dist/robotcha.min.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "rollup -c",
+    "build:types": "tsc -p tsconfig.types.json",
+    "test": "node -e \"console.log('No tests yet')\"",
+    "demo": "concurrently -k -n build,serve -c cyan,magenta \"rollup -c -w\" \"serve -l 4173 .\"",
+    "dev": "npm run demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etienne-martin/robotcha.git"
+  },
+  "bugs": {
+    "url": "https://github.com/etienne-martin/robotcha/issues"
+  },
+  "homepage": "https://github.com/etienne-martin/robotcha#readme",
+  "license": "MIT",
+  "devDependencies": {
+    "tslib": "^2.6.2",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.12.0",
+    "typescript": "^5.3.3",
+    "serve": "^14.2.1",
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@fingerprintjs/botd": "^2.0.0"
+  }
+}
