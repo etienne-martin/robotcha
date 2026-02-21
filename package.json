@@ -1,6 +1,6 @@
 {
   "name": "robotcha",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Robot-Operated Bot-Only Turing Check for Headless Agent.",
   "private": false,
   "main": "dist/robotcha.cjs.js",
